@@ -82,10 +82,7 @@
         ]
       }
     ],
-    "quotes": [
-      2,
-      "single"
-    ],
+    "quotes": [2, "double", { "avoidEscape": true }],
     "jsx-quotes": 1,
     "react/display-name": [
       1,

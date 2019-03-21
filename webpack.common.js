@@ -21,7 +21,9 @@ module.exports = {
       "@css": path.resolve(__dirname, "client/assets/css"),
       "@images": path.resolve(__dirname, "client/assets/images"),
       "@pages": path.resolve(__dirname, "client/src/components/pages/index.js"),
-      "@routes": path.resolve(__dirname, "client/src/routes/index.js")
+      "@routes": path.resolve(__dirname, "client/src/routes/index.js"),
+      "@store": path.resolve(__dirname, "client/src/js/store/index.js"),
+      "@reducers": path.resolve(__dirname, "client/src/js/reducers")
     }
   },
   module: {
