@@ -9,7 +9,7 @@ export default class IndexPage extends Component {
   render() {
     return (
       <Fragment>
-        <div className="main">React setup</div>
+        <div className="main">Redux setup</div>
       </Fragment>
     );
   }
