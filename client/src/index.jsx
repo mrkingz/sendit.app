@@ -4,12 +4,15 @@ import ReactDom from "react-dom";
 import Routes from "@routes";
 import store from "@store";
 
-import "@css/style.css";
+import "@css/font-awesome.min.css";
+import "@css/scarfold.css";
+import "@css/styles.css";
+import "@css/animate.css";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Routes />;
+      <Routes />
     </Provider>
   );
 };

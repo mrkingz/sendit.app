@@ -23,7 +23,13 @@ module.exports = {
       "@pages": path.resolve(__dirname, "client/src/components/pages/index.js"),
       "@routes": path.resolve(__dirname, "client/src/routes/index.js"),
       "@store": path.resolve(__dirname, "client/src/js/store/index.js"),
-      "@reducers": path.resolve(__dirname, "client/src/js/reducers")
+      "@reducers": path.resolve(__dirname, "client/src/js/reducers"),
+      "@headers": path.resolve(__dirname, "client/src/components/headers"),
+      "@hoc": path.resolve(__dirname, "client/src/components/hoc"),
+      "@presentations": path.resolve(
+        __dirname,
+        "client/src/components/presentations"
+      )
     }
   },
   module: {
