@@ -25,7 +25,25 @@ module.exports = {
       "@store": path.resolve(__dirname, "client/src/js/store/index.js"),
       "@reducers": path.resolve(__dirname, "client/src/js/reducers"),
       "@headers": path.resolve(__dirname, "client/src/components/headers"),
-      "@hoc": path.resolve(__dirname, "client/src/components/hoc"),
+      "@containers": path.resolve(
+        __dirname,
+        "client/src/components/containers"
+      ),
+      "@auth": path.resolve(
+        __dirname,
+        "client/src/components/authentication/index.js"
+      ),
+      "@utils": path.resolve(__dirname, "client/src/js/utils/"),
+      "@validations": path.resolve(
+        __dirname,
+        "client/src/js/utils/validations"
+      ),
+      "@request": path.resolve(__dirname, "client/src/js/utils/request.js"),
+      "@actionTypes": path.resolve(
+        __dirname,
+        "client/src/js/actions/actionTypes.js"
+      ),
+      "@actions": path.resolve(__dirname, "client/src/js/actions"),
       "@presentations": path.resolve(
         __dirname,
         "client/src/components/presentations"

@@ -1,12 +1,23 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { IndexPage } from "@pages";
+import Authenticate from "@auth";
+import routes from "./routes";
 
 const Routes = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/:page?" component={IndexPage} />
+        {routes.public.map(({ exact, path, component }, index) => (
+          <Route key={index} exact={exact} path={path} component={component} />
+        ))}
+        {routes.protected.map(({ exact, path, component }, index) => (
+          <Authenticate
+            key={index}
+            exact={exact}
+            path={path}
+            component={component}
+          />
+        ))}
       </Switch>
     </BrowserRouter>
   );

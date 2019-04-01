@@ -1,0 +1,11 @@
+const SHOW_MESSAGE = "SHOW_MESSAGE";
+const HIDE_MESSAGE = "HIDE_MESSAGE";
+const REQUEST_PROCESSING = "REQUEST_PROCESSING";
+
+const actionTypes = {
+  SHOW_MESSAGE,
+  HIDE_MESSAGE,
+  REQUEST_PROCESSING
+};
+
+export default actionTypes;

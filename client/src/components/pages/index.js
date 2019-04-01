@@ -1,3 +1,4 @@
-import IndexPage from "./indexPage";
+import IndexPage from "./IndexPage";
+import SignUp from "./SignUp";
 
-export { IndexPage };
+export { IndexPage, SignUp };
