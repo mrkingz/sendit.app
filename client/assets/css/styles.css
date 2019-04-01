@@ -73,7 +73,7 @@
 }
 
 .auth-redirect {
-    margin: 0 2rem;
+    margin: 0 .5rem;
     font-size: .75rem;
     text-align: right;
     text-shadow: 2px 2px 8px #111; 
@@ -143,8 +143,7 @@ body {
 }
 
 .main {
-    /* background-color: rgb(228, 227, 227); */
-    min-height: calc(100vh - 100px);
+    *min-height: calc(100vh - 100px);
     flex: 1;
 }
 
@@ -217,7 +216,6 @@ body {
     border-radius: 0 4px 4px 0;
     margin: 0; 
     color: #FFF;
-    *border: none;
     -webkit-border-radius: .2rem;
         -moz-border-radius: .2rem;
              border-radius: .2rem;
@@ -415,9 +413,12 @@ button.menu-btn {
 
 .control.invalid {
     border: 1px solid #dd332f;
-    background-color: #fff; 
     -webkit-box-shadow: 0 0 4px 1px #dd332d;
             box-shadow: 0 0 4px 1px #e93c36;
+}
+
+.control.invalid:focus {
+    background-color: rgb(255, 255, 199); 
 }
 
 .control::-webkit-input-placeholder {
@@ -443,7 +444,7 @@ button.menu-btn {
 .control-group {
     display: flex;
     flex-direction: column;
-    margin: 0 .2rem .7rem;
+    margin: 0 .2rem .6rem;
 }
 
 .auth-form .control-group > label[for] {
@@ -727,9 +728,10 @@ div.nexted ~ div.nexted {
 }
 
 .error {
-    color: rgb(202, 12, 12);
-    margin-top: .25rem;
-    font-size: .72rem;
+    color: rgb(214, 7, 7);
+    margin-top: .2rem;
+    font-size: .9rem;
+    text-shadow: 2px 2px 8px rgb(0, 0, 0); 
 }
 
 .error::first-letter {
@@ -768,7 +770,6 @@ div.nexted ~ div.nexted {
     padding: 2rem 1rem;
     text-shadow: 2px 5px 8px rgb(241, 239, 239);
     border-top: 1px solid #9b9b9b;
-    height: 90px;
     background-color: #fefefe;
 }
 
@@ -784,7 +785,7 @@ div.nexted ~ div.nexted {
 }
 
 .form {
-    padding: 1rem;
+    padding: 1.5rem  1.5rem 0;
 }
 
 .form-check {
@@ -1452,7 +1453,7 @@ option:first-of-type {
 
 .section > .control-group > label[for] {
     font-size: .8rem;
-    margin-bottom: .2rem;
+    margin-bottom: .1rem;
 }
 
 select option:first-child:empty,
@@ -1661,15 +1662,15 @@ select option {
 }
 
 .welcome {
-    padding-top: 90px;
+    padding-top: 50px;
     padding-bottom: 20px;
     font-weight: bold;
     font-size: 3rem;
     text-align: center;
 }
 
-.welcome-auth {
-    padding-top: 60px;
+div.welcome-auth {
+    margin-top: 50px;
 }
 
 .welcome-user {
@@ -1725,6 +1726,10 @@ select option {
         width: 100%;
     }
 
+    .form {
+        padding: 1.5rem  1rem 0;
+    }
+
     .links,
     .brand,
     .search-container {
@@ -1740,7 +1745,7 @@ select option {
     }
 
     .main {
-        margin: 0rem
+        margin: 0rem;
     }
 
     .page {
@@ -1797,7 +1802,7 @@ select option {
 
     .welcome-auth ,
     .overlay .welcome-index {
-        font-size: 42px;   
+        font-size: 30px;   
     }
 
     .overlay {
@@ -1809,6 +1814,6 @@ select option {
     }
 
     .welcome-auth {
-        padding-top: 50px;
+        padding-top: 75px;
     }
 }
