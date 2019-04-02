@@ -10,7 +10,8 @@ const validator = (type, data) => {
   if (type === "signup") {
     errors = validateSignUp(data);
   } else if (type === "signin") {
-    errors = validateSignIn(data);
+    const { email, password } = data;
+    errors = validateSignIn({ email, password, errors: {} });
   }
 
   return {
@@ -79,7 +80,7 @@ const validateSignUp = formData => {
 const validateSignIn = formData => {
   let { errors, ...data } = formData;
   Object.keys(data).forEach(item => {
-    data[item] = formData[item].trim();
+    data[item] = formData[item].trim() || formData[item];
   });
 
   if (!data.email) {

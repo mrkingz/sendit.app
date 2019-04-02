@@ -6,7 +6,7 @@ const signInAction = (credentials, history, from) => async dispatch => {
   try {
     const response = await request.post("/auth/login", credentials);
     if (response.status === 200) {
-      setAuthorization(response.data.data.token);
+      setAuthorization(response.data.token);
       if (from) {
         history.push(from);
       }
@@ -14,14 +14,15 @@ const signInAction = (credentials, history, from) => async dispatch => {
       dispatch({
         type: actionTypes.SET_CURRENT_USER,
         payload: {
-          user: response.data.data.user
+          user: response.data.user
         }
       });
       dispatch({
         type: actionTypes.HIDE_MESSAGE
       });
+      return true;
     }
-    return true;
+    return false;
   } catch (error) {
     dispatch({
       type: actionTypes.SHOW_MESSAGE,
@@ -34,6 +35,7 @@ const signInAction = (credentials, history, from) => async dispatch => {
             : "Soemthing went wrong. Sign up  not successful"
       }
     });
+    return false;
   }
 };
 export default signInAction;

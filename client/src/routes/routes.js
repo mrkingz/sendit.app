@@ -1,4 +1,4 @@
-import { IndexPage, SignUp, SignIn } from "@pages";
+import { IndexPage, SignUp, SignIn, Dashboard } from "@pages";
 
 const routes = {
   public: [
@@ -16,6 +16,11 @@ const routes = {
       component: SignIn
     }
   ],
-  protected: []
+  protected: [
+    {
+      path: "/dashboard",
+      component: Dashboard
+    }
+  ]
 };
 export default routes;
