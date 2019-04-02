@@ -20,8 +20,9 @@ const signInAction = (credentials, history, from) => async dispatch => {
       dispatch({
         type: actionTypes.HIDE_MESSAGE
       });
+      return true;
     }
-    return true;
+    return false;
   } catch (error) {
     dispatch({
       type: actionTypes.SHOW_MESSAGE,
@@ -34,6 +35,7 @@ const signInAction = (credentials, history, from) => async dispatch => {
             : "Soemthing went wrong. Sign up  not successful"
       }
     });
+    return false;
   }
 };
 export default signInAction;
