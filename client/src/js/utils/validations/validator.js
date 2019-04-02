@@ -9,6 +9,8 @@ const validator = (type, data) => {
   let errors;
   if (type === "signup") {
     errors = validateSignUp(data);
+  } else if (type === "signin") {
+    errors = validateSignIn(data);
   }
 
   return {
@@ -37,6 +39,7 @@ const validateName = name => {
   const exp = /^[\w'\-,.][^0-9_¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
   return name.match(exp);
 };
+
 /**
  *
  *
@@ -64,6 +67,25 @@ const validateSignUp = formData => {
     errors.password = "Password cannot be empty";
   } else if (data.password.length < 8) {
     errors.password = "Password must be at least 8 characters long";
+  }
+  return errors;
+};
+
+/**
+ *
+ *
+ * @returns {object} object containing error details as properties or empty object
+ */
+const validateSignIn = formData => {
+  let { errors, ...data } = formData;
+  Object.keys(data).forEach(item => {
+    data[item] = formData[item].trim();
+  });
+
+  if (!data.email) {
+    errors.email = "Please, enter your email address";
+  } else if (!data.password) {
+    errors.password = "Please, enter your password";
   }
   return errors;
 };

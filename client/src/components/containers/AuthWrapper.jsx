@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import React, { Component } from "react";
 import actionTypes from "@actionTypes";
-import Template from "@containers/template";
+import Template from "@containers/Template";
 import validator from "@validations/validator";
 import messageAction from "@actions/messageAction";
 import AuthRedirect from "@presentations/AuthRedirect";
@@ -97,7 +97,7 @@ const AuthWrapper = (AuthComponent, inComingPops) => {
     };
 
     render() {
-      const { prompt, authRedirect, text, hint } = inComingPops;
+      const { prompt, authRedirect, text, hint, title } = inComingPops;
       return (
         <Template isAuthPage>
           <div className="bg-image bg-image-auth">
@@ -115,7 +115,7 @@ const AuthWrapper = (AuthComponent, inComingPops) => {
                 <div className="form-wrapper">
                   <div className="transparent">
                     <form action="" className="form auth-form">
-                      <div className="form-title">Sign up</div>
+                      <div className="form-title">{title}</div>
                       <div className="section">
                         <AuthComponent
                           {...this.props}
@@ -145,10 +145,12 @@ const AuthWrapper = (AuthComponent, inComingPops) => {
 
 AuthWrapper.propTypes = {
   prompt: PropTypes.string,
+  title: PropTypes.string,
   onSubmitHandler: PropTypes.func.isRequired,
   hint: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   authRedirect: PropTypes.string.isRequired,
+  messageAction: PropTypes.func.isRequired,
   children: PropTypes.array
 };
 export default compose(

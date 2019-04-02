@@ -2,83 +2,38 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import AuthWrapper from "@containers/AuthWrapper";
 import TextInput from "@presentations/TextInput";
+import CheckInput from "@presentations/CheckInput";
 import Button from "@presentations/Button";
 import AlertMessage from "@presentations/AlertMessage";
-import Required from "@presentations/Required";
 import messageAction from "@actions/messageAction";
-import signUpAction from "@actions/signUpAction";
-import request from "@request";
+import signInAction from "@actions/signInAction";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import actionTypes from "@actionTypes";
-class SignUp extends Component {
-  /**
-   * @description handle submit action
-   *
-   * @param {object} e browser event object
-   */
+import AuthRedirect from "@presentations/AuthRedirect";
+
+class SignIn extends Component {
   onSubmitHandler = async e => {
     e.preventDefault();
     this.props.messageAction({
       type: actionTypes.REQUEST_PROCESSING
     });
-    const validation = await this.props.validateFields(
-      "signup",
-      this.checkIfEmailExist
-    );
+    const validation = await this.props.validateFields("signin");
     if (!validation.hasError) {
-      const { errors, ...data } = this.props.state;
-      const response = this.props.signUpAction(data, this.props.history);
-      /**
-       * If account was successfully created, clear the state
-       */
+      const { email, password } = this.props.state;
+      const response = this.props.signInAction(
+        { email, password },
+        this.props.history
+      );
       if (response) {
         this.props.clearFields();
-        this.props.fieldRefs["firstname"].focus();
       }
     }
   };
-
-  /**
-   * @description check if an email has been used
-   *
-   * @returns {object} an object conatining the error details
-   */
-  checkIfEmailExist = async () => {
-    const { email } = this.props.state;
-    try {
-      await request.post("/auth/email", { email });
-    } catch (error) {
-      return {
-        hasError: error.response.status === 302,
-        error: { email: "Email address has been used" }
-      };
-    }
-  };
-
   render() {
     const { state, onChangeHandler, fieldRefs, isProcessing } = this.props;
     return (
       <Fragment>
-        <TextInput
-          name="firstname"
-          placeholder="First name"
-          onChangeHandler={onChangeHandler}
-          forwardRef={firstname => (fieldRefs.firstname = firstname)}
-          required
-          autofocus
-          value={state.firstname}
-          error={state.errors.firstname}
-        />
-        <TextInput
-          name="lastname"
-          placeholder="Last name"
-          onChangeHandler={onChangeHandler}
-          forwardRef={lastname => (fieldRefs.lastname = lastname)}
-          required
-          value={state.lastname}
-          error={state.errors.lastname}
-        />
         <TextInput
           type="email"
           name="email"
@@ -99,26 +54,37 @@ class SignUp extends Component {
           required
           error={state.errors.password}
         />
+        <CheckInput
+          value={false}
+          type="checkbox"
+          id="remember-me"
+          placeholder="Remember me"
+        />
         <AlertMessage />
         <div className="control-group align-center">
-          <Required />
           <Button
             wrapperStyle="mb-sm"
             btnStyle="btn-primary btn-lg"
-            text={isProcessing ? "Processing..." : "Sign up"}
+            text={isProcessing ? "Processing..." : "Sign in"}
             isDisabled={isProcessing}
             onClick={this.onSubmitHandler}
           />
         </div>
+        <AuthRedirect
+          text="Forgot password?"
+          path="/password"
+          linkStyles="forgot-password bold size-14"
+        />
       </Fragment>
     );
   }
 }
 
-SignUp.propTypes = {
+SignIn.propTypes = {
+  history: PropTypes.object.isRequired,
   clearFields: PropTypes.func.isRequired,
   messageAction: PropTypes.func.isRequired,
-  signUpAction: PropTypes.func.isRequired,
+  signInAction: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
   fieldRefs: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
@@ -136,14 +102,14 @@ export default connect(
   mapStateToProps,
   {
     messageAction,
-    signUpAction
+    signInAction
   }
 )(
-  AuthWrapper(withRouter(SignUp), {
-    text: "Sign in",
-    title: "Sign up",
-    authRedirect: "/signin",
-    prompt: "Already have an account?",
-    hint: "Join our parcel delivery portal to enjoy our services"
+  AuthWrapper(withRouter(SignIn), {
+    text: "Sign up",
+    title: "Sign in",
+    authRedirect: "/signup",
+    prompt: "Don't have an account?",
+    hint: "Please sign in to continue enjoying our services"
   })
 );

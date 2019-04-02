@@ -1,18 +1,21 @@
 import request from "@request";
 import actionTypes from "@actionTypes";
-import messageAction from "@actions/messageAction";
 
-const signUpAction = formData => async dispatch => {
+const signUpAction = (formData, history) => async dispatch => {
   try {
-    await request.post("/auth/signup", formData);
-    dispatch({
-      type: actionTypes.SHOW_MESSAGE,
-      payload: {
-        styles: "alert-success",
-        message: "Your account was succesfully created"
-      }
-    });
-    return true;
+    const response = await request.post("/auth/signup", formData);
+    if (response.status === 201) {
+      history.push("/signin");
+      dispatch({
+        type: actionTypes.SHOW_MESSAGE,
+        payload: {
+          styles: "alert-success",
+          message:
+            "<div>Your account was succesfully created <br> Please, sign in to continue...</div>"
+        }
+      });
+      return true;
+    }
   } catch (error) {
     dispatch({
       type: actionTypes.SHOW_MESSAGE,
