@@ -1,20 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 import Search from "./search";
 import PropTypes from "prop-types";
+import AuthNavMenu from "@headers/AuthNavMenu";
 
-const Navbar = ({ isAuthPage }) => {
-  return (
-    <header>
-      <nav className="container navbar fixed-top">
-        <div className="brand">
-          <Link to="/" className="brand-name">
-            SendIT<sup className="size-12">&trade;</sup>
-          </Link>
-        </div>
-        {isAuthPage ? "" : <Search />}
-        <div className="links">
-          {isAuthPage ? (
+const Navbar = props => {
+  const getNavMenu = () => {
+    if (props.isAuthenticated) {
+      return <AuthNavMenu {...props} />;
+    } else {
+      return (
+        <Fragment>
+          {props.isAuthPage ? (
             <Link to="/" className="nav-link">
               Back
             </Link>
@@ -28,7 +26,21 @@ const Navbar = ({ isAuthPage }) => {
               </Link>
             </span>
           )}
+        </Fragment>
+      );
+    }
+  };
+
+  return (
+    <header>
+      <nav className="container navbar fixed-top">
+        <div className="brand">
+          <Link to="/" className="brand-name">
+            SendIT<sup className="size-12">&trade;</sup>
+          </Link>
         </div>
+        {props.isAuthPage ? "" : <Search />}
+        <div className="links">{getNavMenu()}</div>
       </nav>
     </header>
   );
@@ -38,6 +50,16 @@ Navbar.defaultProps = {
 };
 
 Navbar.propTypes = {
+  user: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   isAuthPage: PropTypes.bool.isRequired
 };
-export default Navbar;
+
+const mapStateToProps = ({ profileReducer }) => {
+  return {
+    isAuthenticated: profileReducer.isAuthenticated,
+    user: profileReducer.user
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(Navbar));

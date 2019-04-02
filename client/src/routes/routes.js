@@ -1,4 +1,4 @@
-import { IndexPage, SignUp } from "@pages";
+import { IndexPage, SignUp, SignIn } from "@pages";
 
 const routes = {
   public: [
@@ -10,6 +10,10 @@ const routes = {
     {
       path: "/signup",
       component: SignUp
+    },
+    {
+      path: "/signin",
+      component: SignIn
     }
   ],
   protected: []

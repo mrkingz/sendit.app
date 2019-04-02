@@ -5,23 +5,25 @@ import { Redirect, Route } from "react-router-dom";
 import authenticate from "@utils/authenticate";
 
 const Authenticate = ({ component: Component, ...rest }) => {
-  <Route
-    {...rest}
-    render={props => {
-      return authenticate() ? (
-        <Component {...rest} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/signin",
-            state: {
-              from: props.location
-            }
-          }}
-        />
-      );
-    }}
-  />;
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        return authenticate() ? (
+          <Component {...rest} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/signin",
+              state: {
+                from: props.location
+              }
+            }}
+          />
+        );
+      }}
+    />
+  );
 };
 
 Authenticate.propTypes = {

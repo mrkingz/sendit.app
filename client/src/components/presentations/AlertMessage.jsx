@@ -1,13 +1,16 @@
 import React, { Fragment } from "react";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
+import ReactHtmlParser from "react-html-parser";
 
 const AlertMessage = props => {
   return (
     <Fragment>
       {props.message ? (
         <div className="control-group">
-          <div className={`alert ${props.styles}`}>{props.message}</div>
+          <div className={`alert ${props.styles}`}>
+            {ReactHtmlParser(props.message)}
+          </div>
         </div>
       ) : (
         ""
