@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-import Search from "./search";
+import Search from "./Search";
 import PropTypes from "prop-types";
 import AuthNavMenu from "@headers/AuthNavMenu";
 

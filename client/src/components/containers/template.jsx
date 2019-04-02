@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import Navbar from "../headers/navbar";
+import Navbar from "../headers/Navbar";
 import Footer from "../footers";
 
 class Template extends Component {

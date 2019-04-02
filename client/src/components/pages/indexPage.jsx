@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import map from "@images/bg.jpg";
 import fast from "@images/fast.jpg";
-import Banner from "@headers/banner";
+import Banner from "@headers/Banner";
 import Template from "@containers/Template";
 import ImageCard from "@presentations/ImageCard";
 import NotePanel from "@presentations/NotePanel";
