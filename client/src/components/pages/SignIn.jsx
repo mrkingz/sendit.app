@@ -21,11 +21,11 @@ class SignIn extends Component {
     const validation = await this.props.validateFields("signin");
     if (!validation.hasError) {
       const { email, password } = this.props.state;
-      const response = this.props.signInAction(
+      const response = await this.props.signInAction(
         { email, password },
         this.props.history
       );
-      if (response) {
+      if (!response) {
         this.props.clearFields();
       }
     }

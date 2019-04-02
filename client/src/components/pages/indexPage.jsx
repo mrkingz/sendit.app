@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import map from "@images/bg.jpg";
 import fast from "@images/fast.jpg";
 import Banner from "@headers/banner";
