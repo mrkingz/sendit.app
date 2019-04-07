@@ -6,7 +6,6 @@ const request = {
   get: path => axios.get(getURL(path)),
   delete: path => axios.delete(getURL(path))
 };
-
 const getURL = path => {
   const isDevelopment = process.env.NODE_ENV === "development";
   const url = isDevelopment

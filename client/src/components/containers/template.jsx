@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import Navbar from "../headers/Navbar";
@@ -16,6 +17,7 @@ class Template extends Component {
 }
 
 Template.propTypes = {
+  children: PropTypes.any,
   isAuthPage: PropTypes.bool
 };
 

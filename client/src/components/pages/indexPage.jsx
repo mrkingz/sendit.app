@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import map from "@images/bg.jpg";
 import fast from "@images/fast.jpg";
 import Banner from "@headers/Banner";
@@ -35,24 +35,26 @@ class IndexPage extends Component {
 
   render() {
     return (
-      <Template>
-        <Banner />
-        <div className="row no-gutters">
-          <div className="col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12">
-            <NotePanel />
-          </div>
-        </div>
-        <div className="sides">
+      <Fragment>
+        <Template>
+          <Banner />
           <div className="row no-gutters">
-            <div className="col-lg-6 col-md-6 col-sm-12">
-              {this.addImageCard(1)}
-            </div>
-            <div className="col-lg-6 col-md-6 col-sm-12">
-              {this.addImageCard(2)}
+            <div className="col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-12">
+              <NotePanel />
             </div>
           </div>
-        </div>
-      </Template>
+          <div className="sides">
+            <div className="row no-gutters">
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                {this.addImageCard(1)}
+              </div>
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                {this.addImageCard(2)}
+              </div>
+            </div>
+          </div>
+        </Template>
+      </Fragment>
     );
   }
 }

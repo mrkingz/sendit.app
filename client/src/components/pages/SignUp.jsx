@@ -27,8 +27,10 @@ class SignUp extends Component {
       this.checkIfEmailExist
     );
     if (!validation.hasError) {
-      const { errors, ...data } = this.props.state;
-      const response = this.props.signUpAction(data, this.props.history);
+      const response = this.props.signUpAction(
+        this.props.state.fields,
+        this.props.history
+      );
       /**
        * If account was successfully created, clear the state
        */
@@ -47,17 +49,23 @@ class SignUp extends Component {
   checkIfEmailExist = async () => {
     const { email } = this.props.state;
     try {
-      await request.post("/auth/email", { email });
-    } catch (error) {
+      const res = await request.post("/auth/email", { email });
       return {
-        hasError: error.response.status === 302,
+        hasError: res.response.status === 302,
         error: { email: "Email address has been used" }
       };
+    } catch (error) {
+      //
     }
   };
 
   render() {
-    const { state, onChangeHandler, fieldRefs, isProcessing } = this.props;
+    const {
+      state: { fields, errors },
+      onChangeHandler,
+      fieldRefs,
+      isProcessing
+    } = this.props;
     return (
       <Fragment>
         <TextInput
@@ -67,8 +75,9 @@ class SignUp extends Component {
           forwardRef={firstname => (fieldRefs.firstname = firstname)}
           required
           autofocus
-          value={state.firstname}
-          error={state.errors.firstname}
+          value={fields.firstname}
+          error={errors.firstname}
+          errorStyles="error-shadow"
         />
         <TextInput
           name="lastname"
@@ -76,18 +85,19 @@ class SignUp extends Component {
           onChangeHandler={onChangeHandler}
           forwardRef={lastname => (fieldRefs.lastname = lastname)}
           required
-          value={state.lastname}
-          error={state.errors.lastname}
+          value={fields.lastname}
+          error={errors.lastname}
+          errorStyles="error-shadow"
         />
         <TextInput
-          type="email"
           name="email"
           placeholder="E-mail address"
           onChangeHandler={onChangeHandler}
           forwardRef={email => (fieldRefs.email = email)}
-          value={state.email}
+          value={fields.email}
           required
-          error={state.errors.email}
+          error={errors.email}
+          errorStyles="error-shadow"
         />
         <TextInput
           type="password"
@@ -95,16 +105,17 @@ class SignUp extends Component {
           placeholder="Password"
           onChangeHandler={onChangeHandler}
           forwardRef={password => (fieldRefs.password = password)}
-          value={state.password}
+          value={fields.password}
           required
-          error={state.errors.password}
+          error={errors.password}
+          errorStyles="error-shadow"
         />
         <AlertMessage />
         <div className="control-group align-center">
           <Required />
           <Button
             wrapperStyle="mb-sm"
-            btnStyle="btn-primary btn-lg"
+            btnStyle="btn-primary btn-lg btn-block"
             text={isProcessing ? "Processing..." : "Sign up"}
             isDisabled={isProcessing}
             onClick={this.onSubmitHandler}

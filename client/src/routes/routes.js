@@ -1,4 +1,4 @@
-import { IndexPage, SignUp, SignIn, Dashboard } from "@pages";
+import { IndexPage, SignUp, SignIn, Dashboard, CreateParcel } from "@pages";
 
 const routes = {
   public: [
@@ -20,6 +20,10 @@ const routes = {
     {
       path: "/dashboard",
       component: Dashboard
+    },
+    {
+      path: "/create",
+      component: CreateParcel
     }
   ]
 };

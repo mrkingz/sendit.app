@@ -12,7 +12,7 @@ const ImageCard = ({ image, text }) => {
     </div>
   );
 };
-ImageCard.propTypes = {
+React.propTypes = {
   image: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired
 };
