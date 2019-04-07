@@ -6,7 +6,7 @@ const signInAction = (credentials, history, from) => async dispatch => {
   try {
     const response = await request.post("/auth/login", credentials);
     if (response.status === 200) {
-      setAuthorization(response.data.token);
+      setAuthorization(response.data.user.token);
       if (from) {
         history.push(from);
       }
@@ -30,9 +30,9 @@ const signInAction = (credentials, history, from) => async dispatch => {
         styles: "alert-danger",
         isProcessing: false,
         message:
-          error.response.status < 500
+          error.response && error.response.status < 500
             ? error.response.data.message
-            : "Soemthing went wrong. Sign up  not successful"
+            : "Soemthing went wrong. Sign up  not successful <br /> Pleaese, try again later..."
       }
     });
     return false;

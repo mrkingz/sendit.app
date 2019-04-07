@@ -20,7 +20,7 @@ class SignIn extends Component {
     });
     const validation = await this.props.validateFields("signin");
     if (!validation.hasError) {
-      const { email, password } = this.props.state;
+      const { email, password } = this.props.state.fields;
       const response = await this.props.signInAction(
         { email, password },
         this.props.history
@@ -30,8 +30,14 @@ class SignIn extends Component {
       }
     }
   };
+
   render() {
-    const { state, onChangeHandler, fieldRefs, isProcessing } = this.props;
+    const {
+      state: { fields, errors },
+      onChangeHandler,
+      fieldRefs,
+      isProcessing
+    } = this.props;
     return (
       <Fragment>
         <TextInput
@@ -40,9 +46,10 @@ class SignIn extends Component {
           placeholder="E-mail address"
           onChangeHandler={onChangeHandler}
           forwardRef={email => (fieldRefs.email = email)}
-          value={state.email}
+          value={fields.email}
           required
-          error={state.errors.email}
+          autoComplete="on"
+          error={errors.email}
         />
         <TextInput
           type="password"
@@ -50,21 +57,23 @@ class SignIn extends Component {
           placeholder="Password"
           onChangeHandler={onChangeHandler}
           forwardRef={password => (fieldRefs.password = password)}
-          value={state.password}
+          value={fields.password}
           required
-          error={state.errors.password}
+          error={errors.password}
         />
-        <CheckInput
-          value={false}
-          type="checkbox"
-          id="remember-me"
-          placeholder="Remember me"
-        />
+        <div className="control-group">
+          <CheckInput
+            value={"0"}
+            type="checkbox"
+            id="remember-me"
+            placeholder="Remember me"
+          />
+        </div>
         <AlertMessage />
-        <div className="control-group align-center">
+        <div className="control-group align-center mt-sm">
           <Button
             wrapperStyle="mb-sm"
-            btnStyle="btn-primary btn-lg"
+            btnStyle="btn-primary btn-lg btn-block"
             text={isProcessing ? "Processing..." : "Sign in"}
             isDisabled={isProcessing}
             onClick={this.onSubmitHandler}

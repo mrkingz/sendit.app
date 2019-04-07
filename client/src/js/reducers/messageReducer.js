@@ -2,7 +2,7 @@ import actionTypes from "@actionTypes";
 
 const messageReducer = (
   state = {
-    styles: "",
+    styles: "alert-success",
     message: "",
     isProcessing: false
   },

@@ -7,44 +7,56 @@ const TextInput = ({
   placeholder,
   error,
   forwardRef,
+  styles,
   name,
   autofocus,
   required,
   value,
-  onChangeHandler
+  label,
+  autoComplete,
+  onChangeHandler,
+  errorStyles
 }) => {
   return (
     <div className="control-group">
       <label htmlFor="email" className={required ? "required" : ""}>
-        {placeholder}
+        {typeof label !== "undefined" ? label : placeholder}
       </label>
       <input
         type={type}
         ref={forwardRef}
-        className={classnames("control col-12", { invalid: error })}
+        className={classnames(`control ${styles}`, { invalid: error })}
         name={name}
         value={value}
         placeholder={placeholder}
-        autoComplete="off"
         autoFocus={autofocus}
+        autoComplete={autoComplete}
         onChange={onChangeHandler}
       />
-      {error && <div className="error"> {error} </div>}
+      {error && <div className={`error ${errorStyles}`}> {error} </div>}
     </div>
   );
 };
 
 TextInput.defaultProps = {
-  type: "text"
+  type: "text",
+  styles: "",
+  required: true,
+  autoComplete: "off",
+  errorStyles: ""
 };
 
 TextInput.propTypes = {
+  label: PropTypes.string,
+  styles: PropTypes.string,
   type: PropTypes.string,
   error: PropTypes.string,
   value: PropTypes.string,
   required: PropTypes.bool,
   autofocus: PropTypes.bool,
+  autoComplete: PropTypes.string,
   name: PropTypes.string.isRequired,
+  forwardRef: PropTypes.func,
   onChangeHandler: PropTypes.func.isRequired,
   placeholder: PropTypes.string.isRequired
 };

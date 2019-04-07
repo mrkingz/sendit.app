@@ -14,10 +14,9 @@ import "@css/animate.css";
 import authenticate from "@utils/authenticate";
 
 if (authenticate()) {
-  const user = decode(localStorage.token);
   store.dispatch({
     type: actionTypes.SET_CURRENT_USER,
-    payload: { user }
+    payload: { user: decode(localStorage.getItem("token")) }
   });
 } else {
   store.dispatch({

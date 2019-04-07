@@ -5,7 +5,7 @@ import { PropTypes } from "prop-types";
 const Button = ({ wrapperStyle, btnStyle, onClick, isDisabled, text }) => {
   return (
     <div
-      className={classnames("control-group", {
+      className={classnames({
         [wrapperStyle]: !!wrapperStyle
       })}
     >
