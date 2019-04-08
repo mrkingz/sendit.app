@@ -7,7 +7,7 @@ class Dashboard extends Component {
   render() {
     return (
       <Template>
-        <div className="row no-gutters bounceIn animate">
+        <div className="row no-gutters">
           <div className="col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-12">
             <div className="page">
               <div className="page-header">
@@ -25,7 +25,7 @@ class Dashboard extends Component {
                         </p>
                         Create Order
                       </Link>
-                      <Link to="/create" className="btn btn-primary">
+                      <Link to="/parcels" className="btn btn-primary">
                         <p>
                           <i className="fa fa-list-ol" />
                         </p>

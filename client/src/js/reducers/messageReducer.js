@@ -30,6 +30,13 @@ const messageReducer = (
         message: "",
         isProcessing: true
       };
+    case actionTypes.SERVER_ERROR:
+      return {
+        ...state,
+        isProcessing: false,
+        style: action.payload.styles,
+        message: action.payload.message
+      };
     default:
       return state;
   }

@@ -1,12 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Template from "@containers/Template";
 import PropTypes from "prop-types";
-
+import Processing from "@presentations/Processing";
 class PageContent extends Component {
   render() {
     return (
       <Template>
-        <div className="row no-gutters bounceIn animate">
+        <div className="row no-gutters">
           <div className="col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-12">
             <div className="page">
               <div className="page-header">
@@ -16,6 +17,7 @@ class PageContent extends Component {
             </div>
           </div>
         </div>
+        {this.props.showProcessing ? <Processing /> : ""}
       </Template>
     );
   }
@@ -23,6 +25,12 @@ class PageContent extends Component {
 
 PageContent.propTypes = {
   pageTitle: PropTypes.string,
-  children: PropTypes.object
+  children: PropTypes.object,
+  showProcessing: PropTypes.bool
 };
-export default PageContent;
+const mapStateToProps = ({ processingReducer }) => {
+  return {
+    showProcessing: processingReducer.showProcessing
+  };
+};
+export default connect(mapStateToProps)(PageContent);

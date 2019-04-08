@@ -5,15 +5,17 @@ const ButtonGroup = ({ wrapperStyles, buttonProps }) => {
   return (
     <div className={`btn-group ${wrapperStyles}`}>
       {buttonProps.map((prop, index) => {
-        return (
-          <button
-            key={index}
-            className={`btn ${prop.btnStyles} btn-group-member`}
-            onClick={prop.onClickHandler}
-          >
-            {prop.text}
-          </button>
-        );
+        if (prop !== null) {
+          return (
+            <button
+              key={index}
+              className={`btn ${prop.btnStyles} btn-group-member`}
+              onClick={prop.onClickHandler}
+            >
+              {prop.text}
+            </button>
+          );
+        }
       })}
     </div>
   );

@@ -1,9 +1,9 @@
 import actionTypes from "@actionTypes";
 
-const messageAction = options => dispatch => {
+const messageAction = action => dispatch => {
   dispatch({
-    type: options.type,
-    payload: options.payload
+    type: action.type,
+    payload: action.payload
   });
 };
 export default messageAction;

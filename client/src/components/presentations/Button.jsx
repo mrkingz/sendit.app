@@ -1,8 +1,16 @@
+/* eslint-disable react/forbid-prop-types */
 import React from "react";
 import classnames from "classnames";
 import { PropTypes } from "prop-types";
 
-const Button = ({ wrapperStyle, btnStyle, onClick, isDisabled, text }) => {
+const Button = ({
+  wrapperStyle,
+  btnStyle,
+  onClick,
+  isDisabled,
+  text,
+  children
+}) => {
   return (
     <div
       className={classnames({
@@ -10,19 +18,19 @@ const Button = ({ wrapperStyle, btnStyle, onClick, isDisabled, text }) => {
       })}
     >
       <button
-        className={classnames("btn", {
-          [btnStyle]: !!btnStyle
-        })}
+        className={`btn ${btnStyle}`}
         disabled={isDisabled}
         onClick={onClick}
       >
-        {text}
+        {children} {text}
       </button>
     </div>
   );
 };
 
 Button.propTypes = {
+  children: PropTypes.any,
+  isDisabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   text: PropTypes.string,
   wrapperStyle: PropTypes.string,
