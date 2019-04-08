@@ -27,6 +27,7 @@
     background-color: #f9d6d5;
     border-color: #f7c6c5;
 }
+
 .success {
     margin: .3rem 1rem 1rem;
 }
@@ -260,9 +261,9 @@ body {
 
 .btn-transparent {
     color: #969595;
-    padding: .5rem 1rem !important;
-    border: 1px solid transparent !important;
-    background-color: transparent !important;
+    padding: .5rem 1rem;
+    border: 1px solid transparent;
+    background-color: transparent;
 }
 
 .btn-lg {
@@ -498,8 +499,10 @@ button.menu-btn {
     color: darkred;
     float: right;
     font-size: 1rem;
-    padding: .1rem;
+    padding: .25rem;
     font-weight: bold;
+    background-color: #FFF;
+    border: 1px solid #FFF;
 }
 
 .close:hover,
@@ -631,6 +634,9 @@ button.menu-btn {
     background-color: #761b18
 }
 
+.square {
+    border-radius: 0;
+}
 .user-name,
 .user-name:first-child:hover,
 .menu-btn:first-child:hover {
@@ -1054,7 +1060,9 @@ html {
     margin-left: .5rem !important;
 }
 
-.links>div>button {
+.nav-menu-button {
+    color: #969595;
+
     display: flex;
     align-items: center;
     padding: .25rem .5rem !important;
@@ -1064,7 +1072,7 @@ html {
 }
 
 
-.links>div>button:focus {
+.nav-menu-button:focus {
     color: rgb(44, 42, 42);
     background-color: #fff !important;
     -webkit-box-shadow: 0 0 4px 3px rgb(197, 196, 196);
@@ -1072,7 +1080,7 @@ html {
     box-shadow: 0 0 4px 3px rgb(197, 196, 196);
 }
 
-.links>div>button:hover {
+.nav-menu-button:hover {
     background-color: rgb(238, 238, 238) !important;
     border: 1px solid rgb(214, 214, 214) !important;
     -webkit-box-shadow: 0 0 4px 3px rgb(197, 196, 196);
@@ -1109,17 +1117,16 @@ html {
 }
 
 .modal {
-    display: none;
+    *display: none;
     position: fixed;
     z-index: 10000;
-    padding-top: 60px;
+    padding-top: 80px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(243, 243, 243, 0.87);
 }
 
 .modal-body .form {
@@ -1616,7 +1623,7 @@ select option {
 }
 
 .success-img {
-    margin-bottom: 1rem;
+    margin-top: 1.5rem;
     height: 60px;
     width: 60px
 }
@@ -1875,6 +1882,11 @@ div.welcome-auth {
 
     .search-wrapper {
         width: 100%;
+    }
+
+    .section, .panel,
+    .section {
+        padding: 1rem .1rem;
     }
 
     .welcome-auth {

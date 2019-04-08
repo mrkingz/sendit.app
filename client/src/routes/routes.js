@@ -1,4 +1,12 @@
-import { IndexPage, SignUp, SignIn, Dashboard, CreateParcel } from "@pages";
+import {
+  IndexPage,
+  SignUp,
+  SignIn,
+  Dashboard,
+  CreateParcel,
+  Parcels,
+  Details
+} from "@pages";
 
 const routes = {
   public: [
@@ -24,6 +32,16 @@ const routes = {
     {
       path: "/create",
       component: CreateParcel
+    },
+    {
+      exact: true,
+      path: "/parcels",
+      component: Parcels
+    },
+    {
+      exact: true,
+      path: "/parcels/:parcelId",
+      component: Details
     }
   ]
 };

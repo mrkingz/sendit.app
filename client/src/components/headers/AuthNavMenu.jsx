@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import dropdown from "@utils/script";
 import actionTypes from "@actionTypes";
+import Button from "@presentations/Button";
 
 const AuthNavMenu = props => {
   const { firstname, lastname } = props.user;
@@ -20,15 +21,12 @@ const AuthNavMenu = props => {
         ""
       ) : (
         <div className="dropdown">
-          <button
-            onClick={dropdown("menu-dropdown")}
-            className="btn btn-transparent dropbtn"
+          <Button
+            onClick={() => dropdown("menu-dropdown")}
+            btnStyle="nav-menu-button dropbtn"
           >
-            <i
-              className="fa fa-bars"
-              onClick={() => dropdown("menu-dropdown")}
-            />
-          </button>
+            <i className="fa fa-bars" />
+          </Button>
           <div
             id="menu-dropdown"
             className="dropdown-content size-11 align-left"
@@ -39,21 +37,21 @@ const AuthNavMenu = props => {
             <Link to="/create" className="menu-btn">
               <i className="fa fa-edit" /> New order
             </Link>
-            <Link to="/orders" className="menu-btn">
+            <Link to="/parcels" className="menu-btn">
               <i className="fa fa-list-ol" /> Delivery orders
             </Link>
           </div>
         </div>
       )}
       <div className="dropdown">
-        <button
+        <Button
           id="avatar"
           onClick={() => dropdown("user-dropdown")}
-          className="btn btn-transparent dropbtn"
+          btnStyle="nav-menu-button dropbtn"
         >
           <i className="fa fa-user-circle" />{" "}
           <i className="fa fa-caret-down size-18 normal ml-md" />
-        </button>
+        </Button>
         <div id="user-dropdown" className="dropdown-content size-11 align-left">
           <div className="panel px-md user-name">
             <div className="size-14 bold">{`${firstname} ${lastname}`}</div>
