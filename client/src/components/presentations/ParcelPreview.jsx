@@ -24,7 +24,7 @@ const ParcelPreview = props => {
   } = props.state;
 
   const fieldNames = [
-    { weight: "Parcel weight (kgs)" },
+    { weight: "Parcel weight" },
     { description: "Parcel description" },
     { deliveryMethod: "Delivery method" },
     { pickUpAddress: "Pick up location" },
@@ -102,7 +102,7 @@ const ParcelPreview = props => {
             return (
               <div className="field" key={index}>
                 <div className="field-name">{Object.values(field)[0]}</div>
-                <div className="field-value">
+                <div className={`field-value ${Object.keys(field)[0]}`}>
                   {Object.keys(field)[0].indexOf("Address") > -1
                     ? joinAddress(Object.keys(field)[0])
                     : rest[Object.keys(field)[0]]}

@@ -1,4 +1,4 @@
-import React, { Feagment, Component } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import request from "@request";
@@ -8,13 +8,14 @@ import actionTypes from "@actions/actionTypes";
 import messageAction from "@actions/messageAction";
 import processingAction from "@actions/processingAction";
 import PageContent from "@containers/PageContent";
+import ParcelDetails from "../pages/ParcelDetails";
 import modalAction from "@actions/modalAction";
 import Modal from "@presentations/Modal";
 import dropdown from "@utils/script";
+import parcelAction from "@actions/parcelAction";
 
 class Parcels extends Component {
   state = {
-    isShow: true,
     pageTitle: "Delivery orders",
     parcels: []
   };
@@ -31,6 +32,8 @@ class Parcels extends Component {
   componentDidMount() {
     this.fetchParcels();
   }
+
+  showDetails = () => this.props.parcel !== null;
 
   fetchParcels = async filter => {
     let response;
@@ -75,8 +78,26 @@ class Parcels extends Component {
     this.fetchParcels(option);
   };
 
-  render() {
-    return (
+  getParcel = parcel => {
+    this.props.parcelAction({
+      type: actionTypes.START_DETAILS_VIEW,
+      payload: { parcel }
+    });
+  };
+
+  goBack = () => {
+    this.props.parcelAction({
+      type: actionTypes.STOP_DETAILS_VIEW
+    });
+    this.props.modalAction({
+      type: actionTypes.CLOSE_MODAL
+    });
+  };
+
+  getContent = () => {
+    return this.showDetails() ? (
+      <ParcelDetails parcel={this.props.parcel} goBack={this.goBack} />
+    ) : (
       <PageContent pageTitle={this.state.pageTitle}>
         <div className="panel">
           <div id="filter-div" className="filter-div section-x">
@@ -122,14 +143,24 @@ class Parcels extends Component {
             </div>
           </div>
           {this.state.parcels.map((parcel, index) => {
-            return <ParcelCard key={index} {...parcel} />;
+            return (
+              <ParcelCard
+                key={index}
+                {...parcel}
+                viewDetails={() => this.getParcel(parcel)}
+              />
+            );
           })}
           {// We don't want message showing on the message if modal is rendering
           this.props.isShow ? "" : <AlertMessage />}
-          <Modal />
+          {this.props.isShow ? <Modal /> : ""}
         </div>
       </PageContent>
     );
+  };
+
+  render() {
+    return this.getContent();
   }
 }
 
@@ -137,13 +168,16 @@ Parcels.propTypes = {
   messageAction: PropTypes.func.isRequired,
   processingAction: PropTypes.func.isRequired,
   modalAction: PropTypes.func,
+  parcelAction: PropTypes.func,
+  parcel: PropTypes.object,
   isShow: PropTypes.bool
 };
 
-const mapStateToProps = ({ messageReducer, modalReducer }) => {
+const mapStateToProps = ({ messageReducer, modalReducer, parcelReducer }) => {
   return {
     message: messageReducer.message,
-    isShow: modalReducer.isShow
+    isShow: modalReducer.isShow,
+    parcel: parcelReducer.parcel
   };
 };
 export default connect(
@@ -151,6 +185,7 @@ export default connect(
   {
     messageAction,
     processingAction,
-    modalAction
+    modalAction,
+    parcelAction
   }
 )(Parcels);

@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Template from "@containers/Template";
@@ -25,7 +26,7 @@ class PageContent extends Component {
 
 PageContent.propTypes = {
   pageTitle: PropTypes.string,
-  children: PropTypes.object,
+  children: PropTypes.any,
   showProcessing: PropTypes.bool
 };
 const mapStateToProps = ({ processingReducer }) => {

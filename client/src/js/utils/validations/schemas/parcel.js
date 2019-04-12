@@ -152,43 +152,40 @@ const getReceiverDetailsSchema = () => {
  * Validate present location
  *
  * @static
- * @param {string} option
- * @returns {function} Returns an express middleware function that handles the validation
- * @method validateAdminUpdate
+ * @param {string}
+ * @method getUpdateStatusSchema
  * @memberof ParcelValidator
  */
-const validateAdminUpdate = option => {
-  return (req, res, next) => {
-    const { decoded, deliveryStatus } = req.body;
-    delete req.body.decoded;
-    const schema = {
-      status: {
-        deliveryStatus: Joi.string()
-          .insensitive()
-          .required()
-          .valid("Transiting", "Delivered")
-          .max(100)
-          .label("Delivery status")
-      },
-      location: {
-        locationStateId: Joi.number()
-          .integer()
-          .greater(0)
-          .positive()
-          .required()
-          .label("Location state Id"),
-        locationLGAId: Joi.number()
-          .integer()
-          .greater(0)
-          .positive()
-          .required()
-          .label("Location L.G.A. Id")
-      }
-    };
-    return schema[option];
-  };
+const getDeliverytatusSchema = () => {
+  return Joi.object().keys({
+    deliveryStatus: Joi.string()
+      .insensitive()
+      .required()
+      .valid("Transiting", "Delivered")
+      .max(100)
+      .error(error => formatError(error, null, "Pleae, select delivery status"))
+  });
+};
+
+const getLocationSchema = () => {
+  return Joi.object().keys({
+    locationStateId: Joi.number()
+      .integer()
+      .greater(0)
+      .positive()
+      .required()
+      .error(error => formatError(error, null, "No state was selected")),
+    locationLGAId: Joi.number()
+      .integer()
+      .greater(0)
+      .positive()
+      .required()
+      .error(error => formatError(error, null, "No L.G. Area was selected"))
+  });
 };
 
 export default {
-  getCreateParelSchema
+  getCreateParelSchema,
+  getDeliverytatusSchema,
+  getLocationSchema
 };
