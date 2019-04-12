@@ -35,18 +35,11 @@ class Parcels extends Component {
 
   showDetails = () => this.props.parcel !== null;
 
-  getPath = () => {
-    const { userId, isUserParcels } = this.props.location.state;
-    return isUserParcels ? `/users/${userId}/parcels` : "/parcels";
-  };
-
   fetchParcels = async filter => {
     let response;
     try {
       response = await request.get(
-        `${this.getPath()}${
-          filter ? "?filter=".concat(filter.toLowerCase()) : ""
-        }`
+        `/parcels${filter ? "?filter=".concat(filter.toLowerCase()) : ""}`
       );
       if (response.status === 200) {
         this.setState({
@@ -69,13 +62,15 @@ class Parcels extends Component {
           payload: { type: "alert" }
         });
       }
-      this.props.messageAction({
-        type: actionTypes.SHOW_MESSAGE,
-        payload: {
-          styles: "alert-danger",
-          message: error.response.data.message
-        }
-      });
+      if (error.response && error.response.data) {
+        this.props.messageAction({
+          type: actionTypes.SHOW_MESSAGE,
+          payload: {
+            styles: "alert-danger",
+            message: error.response.data.message
+          }
+        });
+      }
     }
     this.props.processingAction(false);
   };

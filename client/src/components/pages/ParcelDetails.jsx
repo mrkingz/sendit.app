@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import request from "@request";
 import PageContent from "@containers/PageContent";
 import AlertMessage from "@presentations/AlertMessage";
 import Map from "@presentations/Map";
@@ -16,6 +17,9 @@ import parcelAction from "@actions/parcelAction";
 import UpdateStatus from "@presentations/UpdateStatus";
 
 class Details extends Component {
+  componentDidMount() {
+    this.props.processingAction(false);
+  }
   fieldNames = [
     { weight: "Parcel weight" },
     { description: "Parcel description" },

@@ -48,12 +48,39 @@ class UpdateLocation extends Places {
 
   submitHandler = async e => {
     e.preventDefault();
-    const validation = await validator("location", this.state.fields);
-    console.log(validation);
-    if (validation.hasError) {
-      this.setState({
-        ...this.state,
-        errors: validation.errors
+    try {
+      const validation = await validator("location", this.state.fields);
+      if (validation.hasError) {
+        this.setState({
+          ...this.state,
+          errors: validation.errors
+        });
+      } else {
+        const response = await request.update(
+          `/parcels/${this.props.parcelId}/presentLocation`,
+          this.state.fields
+        );
+        this.props.messageAction({
+          type: actionTypes.SHOW_MESSAGE,
+          payload: {
+            styles: "alert-success",
+            message: response.data.message
+          }
+        });
+        this.setState({
+          ...this.state,
+          fields: this.fields,
+          lgas: [],
+          locationLGAs: []
+        });
+      }
+    } catch (error) {
+      this.props.messageAction({
+        type: actionTypes.SHOW_MESSAGE,
+        payload: {
+          styles: "alert-danger",
+          message: error.response.data.message
+        }
       });
     }
   };
