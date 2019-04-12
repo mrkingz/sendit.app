@@ -25,12 +25,24 @@ class Dashboard extends Component {
                         </p>
                         Create Order
                       </Link>
-                      <Link to="/parcels" className="btn btn-primary">
-                        <p>
-                          <i className="fa fa-list-ol" />
-                        </p>
-                        Delivery orders
-                      </Link>
+                      {this.props.user.isAdmin ? (
+                        <Link
+                          to={{
+                            pathname: "/parcels",
+                            state: {
+                              isUserParcels: false
+                            }
+                          }}
+                          className="btn btn-primary"
+                        >
+                          <p>
+                            <i className="fa fa-list-ol" />
+                          </p>
+                          Delivery orders
+                        </Link>
+                      ) : (
+                        ""
+                      )}
                       <Link to="/profile" className="btn btn-primary">
                         <p>
                           <i className="fa fa-user" />

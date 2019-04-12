@@ -35,11 +35,18 @@ class Parcels extends Component {
 
   showDetails = () => this.props.parcel !== null;
 
+  getPath = () => {
+    const { userId, isUserParcels } = this.props.location.state;
+    return isUserParcels ? `/users/${userId}/parcels` : "/parcels";
+  };
+
   fetchParcels = async filter => {
     let response;
     try {
       response = await request.get(
-        `/parcels${filter ? "?filter=".concat(filter.toLowerCase()) : ""}`
+        `${this.getPath()}${
+          filter ? "?filter=".concat(filter.toLowerCase()) : ""
+        }`
       );
       if (response.status === 200) {
         this.setState({

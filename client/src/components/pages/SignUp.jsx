@@ -47,15 +47,15 @@ class SignUp extends Component {
    * @returns {object} an object conatining the error details
    */
   checkIfEmailExist = async () => {
-    const { email } = this.props.state;
+    const { email } = this.props.state.fields;
     try {
       const res = await request.post("/auth/email", { email });
       return {
-        hasError: res.response.status === 302,
-        error: { email: "Email address has been used" }
+        hasError: res.status === 200,
+        errors: { email: "Email address has been used" }
       };
     } catch (error) {
-      //
+      return { hasError: false };
     }
   };
 

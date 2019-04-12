@@ -76,9 +76,10 @@ const AuthWrapper = (AuthComponent, inComingPops) => {
      */
     validateFields = async (type, callback) => {
       let validation = await validator(type, this.mapFieldsToPage());
-      if (!validation.hasError && typeof callback === "function")
+      if (!validation.hasError && typeof callback === "function") {
         validation = await callback();
-
+      }
+      console.log(validation);
       /**
        * If an input validation fails
        * Update errors in the state with the error detail
