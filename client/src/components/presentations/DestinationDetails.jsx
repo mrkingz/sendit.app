@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TextInput from "@presentations/TextInput";
-import SelectField from "@presentations/SelectField";
+import TextInput from "./TextInput";
+import SelectField from "./SelectField";
 
 const DestinationDetails = props => {
   const { fields, states, lgas, fieldRefs, onChangeHandler, errors } = props;

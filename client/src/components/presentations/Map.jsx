@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import displayMap from "@utils/map";
+import displayMap from "../../js/utils/map";
 import PropTypes from "prop-types";
 
 class Map extends Component {

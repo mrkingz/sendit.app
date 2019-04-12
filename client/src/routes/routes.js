@@ -6,7 +6,7 @@ import {
   CreateParcel,
   Parcels,
   Profile
-} from "@pages";
+} from "../components/pages";
 
 const routes = {
   public: [

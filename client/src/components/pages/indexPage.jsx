@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react";
-import map from "@images/bg.jpg";
-import fast from "@images/fast.jpg";
-import Banner from "@headers/Banner";
-import Template from "@containers/Template";
-import ImageCard from "@presentations/ImageCard";
-import NotePanel from "@presentations/NotePanel";
+import map from "../../../assets/images/bg.jpg";
+import fast from "../../../assets/images/fast.jpg";
+import Banner from "../headers/Banner";
+import Template from "../containers/Template";
+import ImageCard from "../presentations/ImageCard";
+import NotePanel from "../presentations/NotePanel";
 
 class IndexPage extends Component {
   constructor(props) {

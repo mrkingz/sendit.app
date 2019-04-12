@@ -3,10 +3,10 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import actionTypes from "@actions/actionTypes";
-import modalAction from "@actions/modalAction";
-import ButtonGroup from "@presentations/ButtonGroup";
-import AlertMessage from "@presentations/AlertMessage";
+import actionTypes from "../../js/actions/actionTypes";
+import modalAction from "../../js/actions/modalAction";
+import ButtonGroup from "./ButtonGroup";
+import AlertMessage from "./AlertMessage";
 import classnames from "classnames";
 
 const Modal = props => {

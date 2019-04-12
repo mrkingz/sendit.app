@@ -1,6 +1,6 @@
-import request from "@request";
-import actionTypes from "@actionTypes";
-import setAuthorization from "@utils/setAuthorization";
+import request from "../../js/utils/request";
+import actionTypes from "./actionTypes";
+import setAuthorization from "../../js/utils/setAuthorization";
 
 const signInAction = (credentials, history, from) => async dispatch => {
   try {

@@ -1,16 +1,16 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import AuthWrapper from "@containers/AuthWrapper";
-import TextInput from "@presentations/TextInput";
-import CheckInput from "@presentations/CheckInput";
-import Button from "@presentations/Button";
-import AlertMessage from "@presentations/AlertMessage";
-import messageAction from "@actions/messageAction";
-import signInAction from "@actions/signInAction";
+import AuthWrapper from "../containers/AuthWrapper";
+import TextInput from "../presentations/TextInput";
+import CheckInput from "../presentations/CheckInput";
+import Button from "../presentations/Button";
+import AlertMessage from "../presentations/AlertMessage";
+import messageAction from "../../js/actions/messageAction";
+import signInAction from "../../js/actions/signInAction";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import actionTypes from "@actionTypes";
-import AuthRedirect from "@presentations/AuthRedirect";
+import actionTypes from "../../js/actions/actionTypes";
+import AuthRedirect from "../presentations/AuthRedirect";
 
 class SignIn extends Component {
   onSubmitHandler = async e => {
