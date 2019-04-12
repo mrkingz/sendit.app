@@ -37,7 +37,15 @@ const AuthNavMenu = props => {
             <Link to="/create" className="menu-btn">
               <i className="fa fa-edit" /> New order
             </Link>
-            <Link to="/parcels" className="menu-btn">
+            <Link
+              to={{
+                pathname: "/parcels",
+                state: {
+                  isUserParcels: false
+                }
+              }}
+              className="menu-btn"
+            >
               <i className="fa fa-list-ol" /> Delivery orders
             </Link>
           </div>

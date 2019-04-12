@@ -4,7 +4,8 @@ import {
   SignIn,
   Dashboard,
   CreateParcel,
-  Parcels
+  Parcels,
+  Profile
 } from "@pages";
 
 const routes = {
@@ -29,6 +30,10 @@ const routes = {
       component: Dashboard
     },
     {
+      path: "/profile",
+      component: Profile
+    },
+    {
       path: "/create",
       component: CreateParcel
     },
@@ -40,6 +45,11 @@ const routes = {
     {
       exact: true,
       path: "/parcels",
+      component: Parcels
+    },
+    {
+      exact: true,
+      path: "/users/:parcels",
       component: Parcels
     }
   ]

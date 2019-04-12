@@ -24,7 +24,11 @@ const DestinationDetails = props => {
           styles="col-12"
         />
         <div className="row">
-          <div className="col-lg-6 col-md-6 col-sm-12">
+          <div
+            className={`${
+              props.inline ? "col-lg-6 col-md-6 col-sm-12" : "col-12"
+            }`}
+          >
             <SelectField
               id="destination-state"
               name="destinationStateId"
@@ -40,7 +44,11 @@ const DestinationDetails = props => {
               error={errors.destinationStateId}
             />
           </div>
-          <div className="col-lg-6 col-md-6 col-sm-12">
+          <div
+            className={`${
+              props.inline ? "col-lg-6 col-md-6 col-sm-12" : "col-12"
+            }`}
+          >
             <SelectField
               id="desination-lga"
               name="destinationLGAId"
@@ -62,12 +70,17 @@ const DestinationDetails = props => {
   );
 };
 
+DestinationDetails.defaultProps = {
+  inline: true
+};
+
 DestinationDetails.propTypes = {
   lgas: PropTypes.array.isRequired,
   states: PropTypes.array.isRequired,
   fields: PropTypes.object.isRequired,
   fieldRefs: PropTypes.object.isRequired,
   onChangeHandler: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  inline: PropTypes.bool
 };
 export default DestinationDetails;

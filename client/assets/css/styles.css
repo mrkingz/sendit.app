@@ -1673,6 +1673,10 @@ select option {
 
 }
 
+.total {
+    font-size: 1.5rem !important;
+}
+
 .height-transition {
     max-height: 0px;
     transition: max-height .5s;

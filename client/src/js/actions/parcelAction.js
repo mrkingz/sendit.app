@@ -6,4 +6,5 @@ const parcelAction = action => dispatch => {
     payload: action.payload
   });
 };
+
 export default parcelAction;

@@ -97,6 +97,21 @@ class Details extends Component {
     );
   };
 
+  getDestinationModal = parcel => {
+    return (
+      <Modal
+        btnStyles="btn-primary"
+        title={"Update location"}
+        callback={e => this.updateLocation(e)}
+      >
+        <UpdateLocation
+          parcelId={parcel.parcelId}
+          location={parcel.presentLocation}
+        />
+      </Modal>
+    );
+  };
+
   getLocationModal = parcel => {
     return (
       <Modal
@@ -119,6 +134,10 @@ class Details extends Component {
   };
 
   updateStatus = e => {
+    e.preventDefault();
+  };
+
+  updateDestination = e => {
     e.preventDefault();
   };
 
