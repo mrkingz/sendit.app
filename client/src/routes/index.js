@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Authenticate from "@auth";
+import Authenticate from "../components/authentication";
 import routes from "./routes";
 
 const Routes = () => {

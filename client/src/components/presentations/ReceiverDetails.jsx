@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TextInput from "@presentations/TextInput";
-import PhoneField from "@presentations/PhoneField";
+import TextInput from "./TextInput";
+import PhoneField from "./PhoneField";
 
 const ReceiverDetails = ({ fields, fieldRefs, onChangeHandler, errors }) => {
   return (

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import Form from "@containers/Form";
-import SelectField from "@presentations/SelectField";
-import validator from "@validations/validator";
+import Form from "../containers/Form";
+import SelectField from "../presentations/SelectField";
+import validator from "../../js/utils/validations/validator";
+import request from "../../js/utils/request";
+import { connect } from "react-redux";
+import messageAction from "../../js/actions/messageAction";
+import actionTypes from "../../js/actions/actionTypes";
 
 class UpdateStatus extends Component {
   state = {
@@ -16,15 +20,42 @@ class UpdateStatus extends Component {
 
   submitHandler = async e => {
     e.preventDefault();
-    const validation = await validator("status", {
-      deliveryStatus: this.state.deliveryStatus
-    });
-    if (validation.hasError) {
-      this.setState({
-        ...this.state,
-        error: validation.errors
+    try {
+      const validation = await validator("status", {
+        deliveryStatus: this.state.deliveryStatus
       });
-      this.fieldRef.focus();
+      if (validation.hasError) {
+        this.setState({
+          ...this.state,
+          error: validation.errors
+        });
+        this.fieldRef.focus();
+      } else {
+        const response = await request.update(
+          `/parcels/${this.props.parcelId}/status`,
+          {
+            deliveryStatus: this.state.deliveryStatus
+          }
+        );
+        this.props.messageAction({
+          type: actionTypes.SHOW_MESSAGE,
+          payload: {
+            styles: "alert-success",
+            message: response.data.message
+          }
+        });
+        this.setState({
+          deliveryStatus: ""
+        });
+      }
+    } catch (error) {
+      this.props.messageAction({
+        type: actionTypes.SHOW_MESSAGE,
+        payload: {
+          styles: "alert-danger",
+          message: error.response.data.message
+        }
+      });
     }
   };
 
@@ -66,4 +97,9 @@ class UpdateStatus extends Component {
     );
   }
 }
-export default UpdateStatus;
+export default connect(
+  null,
+  {
+    messageAction
+  }
+)(UpdateStatus);

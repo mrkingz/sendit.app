@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import Template from "@containers/Template";
+import Template from "../containers/Template";
 
 class Dashboard extends Component {
   render() {

@@ -1,9 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import Template from "@containers/Template";
 import PropTypes from "prop-types";
-import Processing from "@presentations/Processing";
+import { connect } from "react-redux";
+import Template from "../containers/Template";
+import Processing from "../presentations/Processing";
 class PageContent extends Component {
   render() {
     return (

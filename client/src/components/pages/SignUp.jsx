@@ -1,16 +1,16 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import AuthWrapper from "@containers/AuthWrapper";
-import TextInput from "@presentations/TextInput";
-import Button from "@presentations/Button";
-import AlertMessage from "@presentations/AlertMessage";
-import Required from "@presentations/Required";
-import messageAction from "@actions/messageAction";
-import signUpAction from "@actions/signUpAction";
-import request from "@request";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import actionTypes from "@actionTypes";
+import AuthWrapper from "../containers/AuthWrapper";
+import TextInput from "../presentations/TextInput";
+import Button from "../presentations/Button";
+import AlertMessage from "../presentations/AlertMessage";
+import Required from "../presentations/Required";
+import messageAction from "../../js/actions/messageAction";
+import signUpAction from "../../js/actions/signUpAction";
+import request from "../../js/utils/request";
+import actionTypes from "../../js/actions/actionTypes";
 class SignUp extends Component {
   /**
    * @description handle submit action

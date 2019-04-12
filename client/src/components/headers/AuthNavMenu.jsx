@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import dropdown from "@utils/script";
-import actionTypes from "@actionTypes";
-import Button from "@presentations/Button";
+import dropdown from "../../js/utils/script";
+import actionTypes from "../../js/actions/actionTypes";
+import Button from "../presentations/Button";
 
 const AuthNavMenu = props => {
   const { firstname, lastname } = props.user;
