@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import omit from "lodash/omit";
 import React, { Component, Fragment } from "react";
-import actionTypes from "@actionTypes";
-import Template from "@containers/Template";
-import validator from "@validations/validator";
-import messageAction from "@actions/messageAction";
-import AuthRedirect from "@presentations/AuthRedirect";
+import actionTypes from "../../js/actions/actionTypes";
+import Template from "../containers/Template";
+import validator from "../../js//utils/validations/validator";
+import messageAction from "../../js/actions/messageAction";
+import AuthRedirect from "../presentations/AuthRedirect";
 
 const AuthWrapper = (AuthComponent, inComingPops) => {
   return class Wrapper extends Component {

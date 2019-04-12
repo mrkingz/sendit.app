@@ -2,9 +2,9 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import ButtonGroup from "@presentations/ButtonGroup";
-import messageAction from "@actions/messageAction";
-import AlertMessage from "@presentations/AlertMessage";
+import ButtonGroup from "./ButtonGroup";
+import messageAction from "../../js/actions/messageAction";
+import AlertMessage from "../presentations/AlertMessage";
 
 const ParcelPreview = props => {
   const {

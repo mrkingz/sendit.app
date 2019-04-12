@@ -1,10 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Button from "@presentations/Button";
-import AlertMessage from "@presentations/AlertMessage";
 import PropTypes from "prop-types";
-import messageAction from "@actions/messageAction";
+import Button from "../presentations/Button";
+import AlertMessage from "../presentations/AlertMessage";
+import messageAction from "../../js/actions/messageAction";
 
 class Form extends Component {
   state = {
