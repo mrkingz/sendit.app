@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Button from "@presentations/Button";
@@ -34,7 +35,7 @@ class Form extends Component {
         <div className="form-title">{title}</div>
         {this.props.children}
         <AlertMessage />
-        <div className="mx-lg">
+        <div className="">
           <p className={`required-text ${requiredStyles}`}>
             All fields marked with
             <strong className="required" />
@@ -62,7 +63,7 @@ Form.propTypes = {
   btnText: PropTypes.string,
   btnStyles: PropTypes.string,
   formStyles: PropTypes.string,
-  children: PropTypes.array,
+  children: PropTypes.any,
   requiredStyles: PropTypes.string,
   submitHandler: PropTypes.func.isRequired
 };

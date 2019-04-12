@@ -47,7 +47,8 @@ module.exports = {
       "@presentations": path.resolve(
         __dirname,
         "client/src/components/presentations"
-      )
+      ),
+      "@globals": path.resolve(__dirname, "client/src/components/globals")
     }
   },
   module: {

@@ -1,16 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import Button from "@presentations/Button";
 
-const ParcelCard = ({
-  trackingNo,
-  weight,
-  description,
-  deliveryMethod,
-  deliveryStatus,
-  createdAt,
-  parcelId
-}) => {
+const ParcelCard = props => {
+  const {
+    trackingNo,
+    weight,
+    description,
+    deliveryMethod,
+    deliveryStatus,
+    createdAt,
+    viewDetails
+  } = props;
+
   return (
     <div className="card">
       <div className="nexted">
@@ -42,12 +45,11 @@ const ParcelCard = ({
             <span className="bold">Date: </span>
             {createdAt}
           </span>
-          <Link
-            to={`/parcels/${parcelId}`}
-            className="btn btn-link btn-sm fine-btn"
-          >
-            Details
-          </Link>
+          <Button
+            onClick={viewDetails}
+            btnStyle="btn btn-link btn-sm fine-btn"
+            text="Details"
+          />
         </div>
       </div>
     </div>
@@ -61,6 +63,6 @@ ParcelCard.propTypes = {
   deliveryMethod: PropTypes.string.isRequired,
   deliveryStatus: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
-  parcelId: PropTypes.number.isRequired
+  viewDetails: PropTypes.func.isRequired
 };
-export default ParcelCard;
+export default withRouter(ParcelCard);

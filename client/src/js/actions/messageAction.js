@@ -1,5 +1,3 @@
-import actionTypes from "@actionTypes";
-
 const messageAction = action => dispatch => {
   dispatch({
     type: action.type,

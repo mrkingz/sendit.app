@@ -4,8 +4,7 @@ import {
   SignIn,
   Dashboard,
   CreateParcel,
-  Parcels,
-  Details
+  Parcels
 } from "@pages";
 
 const routes = {
@@ -35,13 +34,13 @@ const routes = {
     },
     {
       exact: true,
-      path: "/parcels",
-      component: Parcels
+      path: "/parcels/:parcelId",
+      component: CreateParcel
     },
     {
       exact: true,
-      path: "/parcels/:parcelId",
-      component: Details
+      path: "/parcels",
+      component: Parcels
     }
   ]
 };

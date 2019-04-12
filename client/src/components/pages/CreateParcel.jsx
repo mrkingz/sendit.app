@@ -17,8 +17,10 @@ import DestinationDetails from "@presentations/DestinationDetails";
 import ReceiverDetails from "@presentations/ReceiverDetails";
 import AlertMessage from "@presentations/AlertMessage";
 import success from "@images/success.png";
+import processingAction from "@actions/processingAction";
+import Places from "@globals/Places";
 
-class CreateParcel extends Component {
+class CreateParcel extends Places {
   constructor(props) {
     super(props);
     this.fields = {
@@ -41,41 +43,70 @@ class CreateParcel extends Component {
       pickUpLGAs: [],
       destinationLGAs: [],
       page: "create",
+      isEditing: false,
       errors: {}
     };
     this.fieldRefs = this.createInputRefs(Object.keys(this.fields));
   }
 
-  componentDidMount() {
-    this.fetchStates();
+  componentWillMount() {
+    if (this.state.isEditing) {
+      this.props.processingAction();
+    }
   }
-  /**
-   * @description Fetch states from storage
-   * @returns void
-   */
-  fetchStates = async () => {
+
+  componentDidMount() {
+    if (this.props.location.pathname !== "/create") {
+      this.fetchParcel(this.props.location.pathname);
+      this.props.processingAction(false);
+    }
+    this.fetchStates();
+    this.forceUpdate();
+  }
+
+  fetchParcel = async resourcePath => {
     try {
-      const response = await request.get("/states");
-      if (response.status === 200) {
-        this.setState({ states: response.data.states });
-      }
+      const response = await request.get(resourcePath);
+      const { parcel } = response.data;
+      const { pickUpLGAs } = await this.fetchLGAs(
+        parcel.from.stateId,
+        "pickUpStateId",
+        true
+      );
+      const { destinationLGAs } = await this.fetchLGAs(
+        parcel.from.stateId,
+        "destinationStateId",
+        true
+      );
+      this.setState({
+        ...this.state,
+        isEditing: true,
+        page: "edit",
+        pickUpLGAs,
+        destinationLGAs,
+        fields: {
+          ...this.state.fields,
+          weight: `${parcel.weight}`,
+          description: parcel.description,
+          deliveryMethod: parcel.deliveryMethod,
+          pickUpAddress: parcel.from.address,
+          pickUpStateId: `${parcel.from.stateId}`,
+          pickUpLGAId: `${parcel.from.lgaId}`,
+          destinationAddress: parcel.to.address,
+          destinationStateId: `${parcel.to.stateId}`,
+          destinationLGAId: `${parcel.to.lgaId}`,
+          receiverName: parcel.to.receiver.name,
+          receiverPhone: parcel.to.receiver.phone.substr(-10)
+        }
+      });
     } catch (error) {
       messageAction({
         type: actionTypes.SHOW_MESSAGE,
         payload: {
-          message: "Something went wrong, could not load states"
+          message: "Something went wrong, could not fetch parcel details"
         }
       });
     }
-  };
-
-  clearLGAsOnStateSelection = selectInputName => {
-    this.setState({
-      ...this.state,
-      [selectInputName === "pickUpStateId"
-        ? "pickUpLGAs"
-        : "destinationLGAs"]: []
-    });
   };
 
   /**
@@ -85,23 +116,31 @@ class CreateParcel extends Component {
    * @param {string} name the name of the L.G. Area select field
    * @param {object} object with the L.G. Area field name and list of all LGAs as key-value pairs
    */
-  fetchLGAs = async (stateId, name) => {
+  fetchLGAs = async (stateId, name, isEditing) => {
     try {
+      const fieldName =
+        name === "pickUpStateId" ? "pickUpLGAs" : "destinationLGAs";
       if (
         stateId &&
         (name === "pickUpStateId" || name === "destinationStateId")
       ) {
         const response = await request.get(`/states/${stateId}/lgas`);
         if (response.status === 200) {
+          if (isEditing) {
+            return {
+              [fieldName]: response.data.lgas.map(data => ({
+                lgaId: data.lgaId,
+                lga: data.lga
+              }))
+            };
+          }
           return {
-            [name === "pickUpStateId"
-              ? "pickUpLGAs"
-              : "destinationLGAs"]: response.data.lgas
+            [fieldName]: response.data.lgas
           };
         }
       } else
         return {
-          [name === "pickUpStateId" ? "pickUpLGAs" : "destinationLGAs"]: []
+          [fieldName]: []
         };
     } catch (error) {
       messageAction({
@@ -137,7 +176,7 @@ class CreateParcel extends Component {
   };
 
   /**
-   * @description Reset the state to default values
+   * @description Return to dashboard
    */
   done = () => {
     this.props.history.push("/dashboard");
@@ -159,14 +198,13 @@ class CreateParcel extends Component {
 
   previewHandler = async event => {
     event.preventDefault();
-    if (this.state.isPreviewing) {
+    if (this.state.page === "preview") {
       this.setState({
         ...this.state,
-        page: "create"
+        page: this.state.isEditing ? "edit" : "create"
       });
     } else {
       let validation = await validator("parcel", this.state.fields);
-
       /**
        * If an input validation fails
        * Update errors in the state with the error detail
@@ -230,7 +268,8 @@ class CreateParcel extends Component {
   getPageTitle = page => {
     const titles = {
       create: "Create order",
-      preview: "Confirm order details"
+      preview: "Confirm order details",
+      edit: "Edit parcel"
     };
     return titles[page];
   };
@@ -248,13 +287,31 @@ class CreateParcel extends Component {
             saveOrder={this.saveOrder}
           />
         );
+      case "edit":
       case "create":
         return (
-          <Form btnText="Continue" submitHandler={this.previewHandler}>
+          <Form
+            btnText={this.state.isEditing ? "Save changes" : "Continue"}
+            submitHandler={this.previewHandler}
+            isEditing={this.state.isEditing}
+          >
+            {this.state.isEditing ? (
+              <div className="mb-lg align-right">
+                <button
+                  className="btn btn-link fine-btn normal size-13"
+                  onClick={() => this.props.history.push("/parcels")}
+                >
+                  <i className="fa fa-angle-double-left" /> Go back
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
             <ParcelDetails
               onChangeHandler={this.onChangeHandler}
               fieldRefs={this.fieldRefs}
               fields={fields}
+              state={this.state}
               errors={errors}
             />
             <PickUpDetails
@@ -281,6 +338,7 @@ class CreateParcel extends Component {
             />
           </Form>
         );
+
       case "submitted":
         return (
           <div className="section bounceIn animate">
@@ -333,8 +391,13 @@ class CreateParcel extends Component {
 }
 
 CreateParcel.propTypes = {
+  history: PropTypes.object,
+  push: PropTypes.func,
   isProcessing: PropTypes.bool.isRequired,
-  messageAction: PropTypes.func.isRequired
+  messageAction: PropTypes.func.isRequired,
+  processingAction: PropTypes.func,
+  locatio: PropTypes.func,
+  pathname: PropTypes.string
 };
 
 const mapStateToProps = ({ messageReducer }) => {
@@ -346,6 +409,7 @@ const mapStateToProps = ({ messageReducer }) => {
 export default connect(
   mapStateToProps,
   {
-    messageAction
+    messageAction,
+    processingAction
   }
 )(withRouter(CreateParcel));

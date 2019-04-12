@@ -3,14 +3,8 @@ import PropTypes from "prop-types";
 import TextInput from "@presentations/TextInput";
 import SelectField from "@presentations/SelectField";
 
-const DestinationDetails = ({
-  fields,
-  states,
-  lgas,
-  fieldRefs,
-  onChangeHandler,
-  errors
-}) => {
+const DestinationDetails = props => {
+  const { fields, states, lgas, fieldRefs, onChangeHandler, errors } = props;
   return (
     <div className="control-group panel-group">
       <span>Parcel destination</span>
