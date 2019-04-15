@@ -1,5 +1,5 @@
-import request from "@request";
-import actionTypes from "@actionTypes";
+import request from "../../js/utils/request";
+import actionTypes from "./actionTypes";
 
 const signUpAction = (formData, history) => async dispatch => {
   try {

@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import Button from "@presentations/Button";
+import Button from "./Button";
 
 const ParcelCard = props => {
   const {

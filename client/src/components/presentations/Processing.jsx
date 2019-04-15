@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import processing from "@images/processing.gif";
+import processing from "../../../assets/images/processing.gif";
 import classnames from "classnames";
 
 const Processing = props => {

@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import request from "@request";
-import PageContent from "@containers/PageContent";
-import dropdown from "@utils/script";
-import avatar from "@images/avatar.png";
-import FileBrowser from "@presentations/FileBrowser";
-import processingAction from "@actions/processingAction";
-import UserOrders from "@presentations/UserOrders";
+import request from "../../js/utils/request";
+import PageContent from "../containers/PageContent";
+import dropdown from "../../js/utils/script";
+import avatar from "../../../assets/images/avatar.png";
+import FileBrowser from "../presentations/FileBrowser";
+import processingAction from "../../js/actions/processingAction";
+import UserOrders from "../presentations/UserOrders";
 
 class Profile extends Component {
   constructor(props) {

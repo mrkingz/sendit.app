@@ -1,5 +1,5 @@
 import decode from "jwt-decode";
-import setAthorizationToken from "@utils/setAuthorization";
+import setAthorizationToken from "./setAuthorization";
 
 const authenticate = () => {
   const token = localStorage.getItem("token");

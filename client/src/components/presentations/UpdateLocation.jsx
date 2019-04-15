@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import omit from "lodash/omit";
-import request from "@request";
-import SelectField from "@presentations/SelectField";
-import Form from "@containers/Form";
-import Places from "@globals/Places";
-import actionTypes from "@actions/actionTypes";
-import messageAction from "@actions/messageAction";
-import validator from "@validations/validator";
+import request from "../../js/utils/request";
+import SelectField from "./SelectField";
+import Form from "../containers/Form";
+import Places from "../globals/Places";
+import actionTypes from "../../js/actions/actionTypes";
+import messageAction from "../../js/actions/messageAction";
+import validator from "../../js/utils/validations/validator";
 
 class UpdateLocation extends Places {
   constructor(props) {

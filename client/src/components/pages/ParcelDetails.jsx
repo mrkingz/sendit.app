@@ -2,19 +2,19 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import request from "@request";
-import PageContent from "@containers/PageContent";
-import AlertMessage from "@presentations/AlertMessage";
-import Map from "@presentations/Map";
-import actionTypes from "@actions/actionTypes";
-import messageAction from "@actions/messageAction";
-import processingAction from "@actions/processingAction";
-import modalAction from "@actions/modalAction";
-import Modal from "@presentations/Modal";
-import dropdown from "@utils/script";
-import UpdateLocation from "@presentations/UpdateLocation";
-import parcelAction from "@actions/parcelAction";
-import UpdateStatus from "@presentations/UpdateStatus";
+import request from "../../js/utils/request";
+import PageContent from "../containers/PageContent";
+import AlertMessage from "../presentations/AlertMessage";
+import Map from "../presentations/Map";
+import actionTypes from "../../js/actions/actionTypes";
+import messageAction from "../../js/actions/messageAction";
+import processingAction from "../../js/actions/processingAction";
+import modalAction from "../../js/actions/modalAction";
+import Modal from "../presentations/Modal";
+import dropdown from "../../js/utils/script";
+import UpdateLocation from "../presentations/UpdateLocation";
+import parcelAction from "../../js/actions/parcelAction";
+import UpdateStatus from "../presentations/UpdateStatus";
 
 class Details extends Component {
   componentDidMount() {

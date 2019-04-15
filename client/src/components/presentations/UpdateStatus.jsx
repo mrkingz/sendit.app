@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Form from "@containers/Form";
-import SelectField from "@presentations/SelectField";
-import validator from "@validations/validator";
-import request from "@request";
+import Form from "../containers/Form";
+import SelectField from "../presentations/SelectField";
+import validator from "../../js/utils/validations/validator";
+import request from "../../js/utils/request";
 import { connect } from "react-redux";
-import messageAction from "@actions/messageAction";
-import actionTypes from "@actions/actionTypes";
+import messageAction from "../../js/actions/messageAction";
+import actionTypes from "../../js/actions/actionTypes";
 
 class UpdateStatus extends Component {
   state = {

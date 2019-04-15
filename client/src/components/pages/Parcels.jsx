@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import request from "@request";
-import AlertMessage from "@presentations/AlertMessage";
-import ParcelCard from "@presentations/parcelCard";
-import actionTypes from "@actions/actionTypes";
-import messageAction from "@actions/messageAction";
-import processingAction from "@actions/processingAction";
-import PageContent from "@containers/PageContent";
+import request from "../../js/utils/request";
+import AlertMessage from "../presentations/AlertMessage";
+import ParcelCard from "../presentations/parcelCard";
+import actionTypes from "../../js/actions/actionTypes";
+import messageAction from "../../js/actions/messageAction";
+import processingAction from "../../js/actions/processingAction";
+import PageContent from "../containers/PageContent";
 import ParcelDetails from "../pages/ParcelDetails";
-import modalAction from "@actions/modalAction";
-import Modal from "@presentations/Modal";
-import dropdown from "@utils/script";
-import parcelAction from "@actions/parcelAction";
+import modalAction from "../../js/actions/modalAction";
+import Modal from "../presentations/Modal";
+import dropdown from "../../js/utils/script";
+import parcelAction from "../../js/actions/parcelAction";
 
 class Parcels extends Component {
   state = {

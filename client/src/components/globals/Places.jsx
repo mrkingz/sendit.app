@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import omit from "lodash/omit";
-import request from "@request";
-import messageAction from "@actions/messageAction";
-import actionTypes from "@actionTypes";
+import request from "../../js/utils/request";
+import messageAction from "../../js/actions/messageAction";
+import actionTypes from "../../js/actions/actionTypes";
 
 class Places extends Component {
   constructor(props) {
