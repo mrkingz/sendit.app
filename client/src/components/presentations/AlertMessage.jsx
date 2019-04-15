@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
 import classnames from "classnames";
 
-const AlertMessage = props => {
+export const AlertMessage = props => {
   return (
     <Fragment>
       {props.message ? (
@@ -28,11 +28,14 @@ AlertMessage.propTypes = {
   styles: PropTypes.string
 };
 
-const mapStateToProps = ({ messageReducer }) => {
+export const mapStateToProps = ({ messageReducer }) => {
   return {
     message: messageReducer.message,
     styles: messageReducer.styles
   };
 };
 
-export default connect(mapStateToProps)(AlertMessage);
+export default connect(
+  mapStateToProps,
+  null
+)(AlertMessage);
