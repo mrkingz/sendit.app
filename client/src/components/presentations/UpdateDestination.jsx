@@ -1,33 +1,28 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import omit from "lodash/omit";
 import request from "../../js/utils/request";
-import SelectField from "./SelectField";
 import Form from "../containers/Form";
 import Places from "../globals/Places";
+import TextInput from "./TextInput";
+import SelectField from "./SelectField";
 import actionTypes from "../../js/actions/actionTypes";
 import messageAction from "../../js/actions/messageAction";
 import modalAction from "../../js/actions/modalAction";
 import validator from "../../js/utils/validations/validator";
-class UpdateLocation extends Places {
+
+class UpdateDestination extends Places {
   constructor(props) {
     super(props);
-
     this.fields = {
-      locationStateId: this.props.location
-        ? this.props.location.locationStateId
-        : "",
-      locationLGAId: this.props.location
-        ? this.props.location.locationLGAId
-        : ""
+      destinationAddress: this.props.destinationAddress,
+      destinationStateId: this.props.destinationStateId,
+      destinationLGAId: this.props.destinationLGAId
     };
     this.state = {
       fields: this.fields,
-      parcelId: this.props.parcelId,
       states: [],
       lgas: [],
-      locationLGAs: [],
-      parcel: {},
       errors: {}
     };
     this.fieldRefs = this.createInputRefs(Object.keys(this.fields));
@@ -37,35 +32,9 @@ class UpdateLocation extends Places {
     await this.fetchStates();
     this.setState({
       ...this.state,
-      lgas: await this.fetchLGAs(this.state.fields.locationStateId)
+      lgas: await this.fetchLGAs(this.state.fields.destinationStateId)
     });
   }
-
-  updateLocation = async () => {
-    try {
-      const validation = await validator("location", this.state.fields);
-      if (validation.hasError) {
-        this.setState({
-          ...this.state,
-          errors: validation.errors
-        });
-      } else {
-        const response = await request.update(
-          `/parcels/${this.props.parcelId}/presentLocation`,
-          this.state.fields
-        );
-        this.props.renderUpdate(response.data.parcel, response.data.message);
-      }
-    } catch (error) {
-      this.props.messageAction({
-        type: actionTypes.SHOW_MESSAGE,
-        payload: {
-          styles: "alert-danger",
-          message: "Something went wrong, could not update location"
-        }
-      });
-    }
-  };
 
   /**
    * @description Handle an input on change event
@@ -78,14 +47,17 @@ class UpdateLocation extends Places {
     this.setState({
       ...this.state,
       lgas:
-        name !== "locationStateId"
+        name !== "destinationStateId"
           ? this.state.lgas
           : await this.fetchLGAs(value, name),
+      destinationLGAId: "",
       errors: omit(this.state.errors, name),
       fields: {
         ...this.state.fields,
-        locationLGAId:
-          name === "locationStateId" ? "" : this.state.fields.locationLGAId,
+        destinationLGAId:
+          name === "destinationStateId"
+            ? ""
+            : this.state.fields.destinationStateId,
         [name]: value
       }
     });
@@ -98,7 +70,7 @@ class UpdateLocation extends Places {
    * @param {object} object with the L.G. Area field name and list of all LGAs as key-value pairs
    */
   fetchLGAs = async stateId => {
-    if (name === "locationLGAId") return this.state.lgas;
+    if (name === "destinationLGAId") return this.state.lgas;
     else if (stateId) {
       try {
         const response = await request.get(`/states/${stateId}/lgas`);
@@ -120,54 +92,97 @@ class UpdateLocation extends Places {
     } else return [];
   };
 
+  updateDestination = async () => {
+    try {
+      const validation = await validator("destination", this.state.fields);
+      if (validation.hasError) {
+        this.setState({
+          ...this.state,
+          errors: validation.errors
+        });
+        this.fieldRefs[Object.keys(validation.errors)[0]].focus();
+      } else {
+        const {
+          data: { parcel, message }
+        } = await request.update(
+          `/parcels/${this.props.parcelId}/destination`,
+          this.state.fields
+        );
+        const { stateId, lgaId } = parcel.to;
+        const {
+          data: { area }
+        } = await request.get(`/states/${stateId}/lgas/${lgaId}`);
+        parcel.to = { ...parcel.to, ...area };
+        this.props.renderUpdate(parcel, message);
+      }
+    } catch (error) {
+      this.props.messageAction({
+        type: actionTypes.SHOW_MESSAGE,
+        payload: {
+          styles: "alert-danger",
+          message: "Something went wrong, could not update parcel destination"
+        }
+      });
+    }
+  };
+
   render() {
-    const { errors, fields } = this.state;
+    const { fields, errors } = this.state;
     return (
       <div className="panel">
         <Form
           btnText="Save"
           btnStyles="btn-block"
           requiredStyles="hide"
-          submitHandler={this.updateLocation}
+          submitHandler={this.updateDestination}
         >
-          <SelectField
-            id="location-state"
-            name="locationStateId"
-            placeholder="State"
-            value={`${fields.locationStateId}`}
+          <TextInput
+            name="destinationAddress"
+            placeholder="Destination address"
             onChangeHandler={this.onChangeHandler}
-            forwardRef={locationStateId =>
-              (this.fieldRefs.locationStateId = locationStateId)
+            forwardRef={destinationAddress =>
+              (this.fieldRefs.destinationAddress = destinationAddress)
+            }
+            value={fields.destinationAddress}
+            error={errors.destinationAddress}
+            styles="col-12"
+          />
+          <SelectField
+            id="destination-state"
+            name="destinationStateId"
+            placeholder="State"
+            value={`${fields.destinationStateId}`}
+            onChangeHandler={this.onChangeHandler}
+            forwardRef={destinationStateId =>
+              (this.fieldRefs.destinationStateId = destinationStateId)
             }
             getFieldsName={() => "state"}
             getObjectKey={() => "stateId"}
             options={this.state.states}
-            error={errors.locationStateId}
+            error={errors.destinationStateId}
           />
           <SelectField
-            id="location-lga"
-            name="locationLGAId"
+            id="desination-lga"
+            name="destinationLGAId"
             placeholder="L.G. Area"
-            value={`${fields.locationLGAId}`}
+            value={`${fields.destinationLGAId}`}
             onChangeHandler={this.onChangeHandler}
-            forwardRef={locationLGAId =>
-              (this.fieldRefs.locationLGAId = locationLGAId)
+            forwardRef={destinationLGAId =>
+              (this.fieldRefs.destinationLGAId = destinationLGAId)
             }
             getFieldsName={() => "lga"}
             getObjectKey={() => "lgaId"}
             options={this.state.lgas}
-            error={errors.locationLGAId}
+            error={errors.destinationLGAId}
           />
         </Form>
       </div>
     );
   }
 }
-
 export default connect(
   null,
   {
-    messageAction,
-    modalAction
+    messageAction
   }
-)(UpdateLocation);
+)(UpdateDestination);

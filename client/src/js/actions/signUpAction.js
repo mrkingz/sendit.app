@@ -25,7 +25,7 @@ const signUpAction = (formData, history) => async dispatch => {
         message:
           error.response.status < 500
             ? error.response.data.message
-            : "Soemthing went wrong. Sign up  not successful"
+            : "Something went wrong. Sign up  not successful"
       }
     });
   }

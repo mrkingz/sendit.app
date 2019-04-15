@@ -5,7 +5,7 @@ import ParcelSchemas from "./schemas/parcel";
 const validator = async (type, data) => {
   let result;
   Object.keys(data).forEach(item => {
-    data[item] = data[item] ? data[item].trim() : data[item];
+    data[item] = data[item] ? data[item].toString().trim() : data[item];
   });
   await Joi.validate(
     data,
@@ -35,7 +35,11 @@ const getSchema = type => {
     signin: UserSchemas.getSignInSchema(),
     parcel: ParcelSchemas.getCreateParelSchema(),
     status: ParcelSchemas.getDeliverytatusSchema(),
-    location: ParcelSchemas.getLocationSchema()
+    location: ParcelSchemas.getLocationSchema(),
+    details: ParcelSchemas.getParcelDetailsSchema(),
+    destination: ParcelSchemas.getDestinationUpdateSchema(),
+    pickup: ParcelSchemas.getPickUpUpdateSchema(),
+    receiver: ParcelSchemas.getReceiverUpdateSchema()
   };
   return schemas[type];
 };

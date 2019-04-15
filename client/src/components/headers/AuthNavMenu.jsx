@@ -6,7 +6,7 @@ import actionTypes from "../../js/actions/actionTypes";
 import Button from "../presentations/Button";
 
 const AuthNavMenu = props => {
-  const { firstname, lastname } = props.user;
+  const { firstname, lastname, isAdmin } = props.user;
   const logOut = () => {
     props.dispatch({
       type: actionTypes.LOGOUT_CURRENT_USER
@@ -37,17 +37,21 @@ const AuthNavMenu = props => {
             <Link to="/create" className="menu-btn">
               <i className="fa fa-edit" /> New order
             </Link>
-            <Link
-              to={{
-                pathname: "/parcels",
-                state: {
-                  isUserParcels: false
-                }
-              }}
-              className="menu-btn"
-            >
-              <i className="fa fa-list-ol" /> Delivery orders
-            </Link>
+            {isAdmin ? (
+              <Link
+                to={{
+                  pathname: "/parcels",
+                  state: {
+                    isUserParcels: false
+                  }
+                }}
+                className="menu-btn"
+              >
+                <i className="fa fa-list-ol" /> Delivery orders
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       )}
