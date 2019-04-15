@@ -5,7 +5,8 @@ import {
   Dashboard,
   CreateParcel,
   Parcels,
-  Profile
+  Profile,
+  Parcel
 } from "../components/pages";
 
 const routes = {
@@ -40,7 +41,7 @@ const routes = {
     {
       exact: true,
       path: "/parcels/:parcelId",
-      component: CreateParcel
+      component: Parcel
     },
     {
       exact: true,

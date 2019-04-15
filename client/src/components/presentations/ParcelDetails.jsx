@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import TextInput from "./TextInput";
 import CheckInput from "./CheckInput";
+
 const ParcelDetails = ({ fields, fieldRefs, onChangeHandler, errors }) => {
   return (
     <div className="control-group panel-group">

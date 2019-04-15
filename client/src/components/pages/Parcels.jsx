@@ -3,16 +3,14 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import request from "../../js/utils/request";
 import AlertMessage from "../presentations/AlertMessage";
-import ParcelCard from "../presentations/parcelCard";
+import ParcelCard from "../presentations/ParcelCard";
 import actionTypes from "../../js/actions/actionTypes";
 import messageAction from "../../js/actions/messageAction";
 import processingAction from "../../js/actions/processingAction";
 import PageContent from "../containers/PageContent";
-import ParcelDetails from "../pages/ParcelDetails";
 import modalAction from "../../js/actions/modalAction";
 import Modal from "../presentations/Modal";
 import dropdown from "../../js/utils/script";
-import parcelAction from "../../js/actions/parcelAction";
 
 class Parcels extends Component {
   state = {
@@ -20,26 +18,23 @@ class Parcels extends Component {
     parcels: []
   };
 
-  /**
-   * @description Render progress info so user can be aware processing is on
-   *
-   * @memberof Parcels
-   */
-  componentWillMount() {
-    this.props.processingAction();
-  }
-
   componentDidMount() {
+    this.props.processingAction();
     this.fetchParcels();
   }
 
-  showDetails = () => this.props.parcel !== null;
+  getPath = () => {
+    const { isUserParcels, userId } = this.props.location.state;
+    return isUserParcels ? `/users/${userId}/parcels` : "/parcels";
+  };
 
   fetchParcels = async filter => {
     let response;
     try {
       response = await request.get(
-        `/parcels${filter ? "?filter=".concat(filter.toLowerCase()) : ""}`
+        `${this.getPath()}${
+          filter ? "?filter=".concat(filter.toLowerCase()) : ""
+        }`
       );
       if (response.status === 200) {
         this.setState({
@@ -49,7 +44,7 @@ class Parcels extends Component {
       }
     } catch (error) {
       if (error.status === 500) {
-        this.props.messageAction({
+        return this.props.messageAction({
           type: actionTypes.SERVER_ERROR,
           payload: {
             message: "Something went wrong, could not fetch parcels"
@@ -87,19 +82,9 @@ class Parcels extends Component {
     });
   };
 
-  goBack = () => {
-    this.props.parcelAction({
-      type: actionTypes.STOP_DETAILS_VIEW
-    });
-    this.props.modalAction({
-      type: actionTypes.CLOSE_MODAL
-    });
-  };
-
   getContent = () => {
-    return this.showDetails() ? (
-      <ParcelDetails parcel={this.props.parcel} goBack={this.goBack} />
-    ) : (
+    const { isUserParcels, userId } = this.props.location.state;
+    return (
       <PageContent pageTitle={this.state.pageTitle}>
         <div className="panel">
           <div id="filter-div" className="filter-div section-x">
@@ -149,7 +134,9 @@ class Parcels extends Component {
               <ParcelCard
                 key={index}
                 {...parcel}
-                viewDetails={() => this.getParcel(parcel)}
+                userId={userId}
+                isUserParcels={isUserParcels}
+                parcelId={parcel.parcelId}
               />
             );
           })}
@@ -171,15 +158,13 @@ Parcels.propTypes = {
   processingAction: PropTypes.func.isRequired,
   modalAction: PropTypes.func,
   parcelAction: PropTypes.func,
-  parcel: PropTypes.object,
   isShow: PropTypes.bool
 };
 
-const mapStateToProps = ({ messageReducer, modalReducer, parcelReducer }) => {
+const mapStateToProps = ({ messageReducer, modalReducer }) => {
   return {
     message: messageReducer.message,
-    isShow: modalReducer.isShow,
-    parcel: parcelReducer.parcel
+    isShow: modalReducer.isShow
   };
 };
 export default connect(
@@ -187,7 +172,6 @@ export default connect(
   {
     messageAction,
     processingAction,
-    modalAction,
-    parcelAction
+    modalAction
   }
 )(Parcels);

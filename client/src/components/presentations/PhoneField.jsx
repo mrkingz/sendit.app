@@ -12,11 +12,12 @@ const PhoneField = ({
   value,
   forwardRef,
   autofocus,
-  onChangeHandler
+  onChangeHandler,
+  wrapperStyles
 }) => {
   return (
     <div className="row">
-      <div className="col-lg-7 col-md-8 col-sm-12">
+      <div className={`${wrapperStyles}`}>
         <div className="control-group">
           <label
             htmlFor="receiver-phone"
@@ -53,6 +54,9 @@ const PhoneField = ({
       </div>
     </div>
   );
+};
+PhoneField.defaultProps = {
+  wrapperStyles: "col-lg-7 col-md-8 col-sm-12"
 };
 
 PhoneField.propTypes = {

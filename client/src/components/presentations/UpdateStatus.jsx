@@ -8,18 +8,20 @@ import messageAction from "../../js/actions/messageAction";
 import actionTypes from "../../js/actions/actionTypes";
 
 class UpdateStatus extends Component {
-  state = {
-    deliveryStatus: "",
-    error: {}
-  };
-  fieldref = React.createRef();
+  constructor(props) {
+    super(props);
+    this.state = {
+      deliveryStatus: "",
+      error: {}
+    };
+    this.fieldref = React.createRef();
+  }
 
   componentDidMount() {
     this.fieldRef.focus();
   }
 
-  submitHandler = async e => {
-    e.preventDefault();
+  submitHandler = async () => {
     try {
       const validation = await validator("status", {
         deliveryStatus: this.state.deliveryStatus
@@ -37,23 +39,14 @@ class UpdateStatus extends Component {
             deliveryStatus: this.state.deliveryStatus
           }
         );
-        this.props.messageAction({
-          type: actionTypes.SHOW_MESSAGE,
-          payload: {
-            styles: "alert-success",
-            message: response.data.message
-          }
-        });
-        this.setState({
-          deliveryStatus: ""
-        });
+        this.props.renderUpdate(response.data.parcel, response.data.message);
       }
     } catch (error) {
       this.props.messageAction({
         type: actionTypes.SHOW_MESSAGE,
         payload: {
           styles: "alert-danger",
-          message: error.response.data.message
+          message: error
         }
       });
     }

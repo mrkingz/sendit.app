@@ -3,24 +3,6 @@ import UserSchemas from "./user";
 import formatError from "../errorFormatter";
 
 /**
- * Validate parcel delivery order details
- *
- * @static
- * @param {string} option
- * @returns {function} Returns an express middleware function that handles the validation
- * @method validateParcelDetails
- */
-const getUpdateParcel = option => {
-  const schemas = {
-    parcel: getParcelDetailsSchema(),
-    pickup: getPickupDetailsSchema(),
-    destination: getDestinationDetailsSchema(),
-    receiver: getReceiverDetailsSchema()
-  };
-  return schemas[option];
-};
-
-/**
  * Create parcel validation schema
  *
  * @static
@@ -58,9 +40,8 @@ const getParcelDetailsSchema = () => {
       ])
       .required(),
     description: Joi.string()
-      .max(255)
-      .allow("")
-      .required(),
+      .required()
+      .max(255),
     deliveryMethod: Joi.string()
       .valid("Fast", "Normal")
       .required()
@@ -114,7 +95,11 @@ const getDestinationDetailsSchema = () => {
       .integer()
       .required()
       .error(error =>
-        formatError(error, null, "Please, select state for parcel L.G. Area")
+        formatError(
+          error,
+          null,
+          "Please, select L.G. Area for parcel destination"
+        )
       ),
     destinationStateId: Joi.number()
       .integer()
@@ -184,8 +169,24 @@ const getLocationSchema = () => {
   });
 };
 
+const getDestinationUpdateSchema = () => {
+  return Joi.object().keys(getDestinationDetailsSchema());
+};
+
+const getPickUpUpdateSchema = () => {
+  return Joi.object().keys(getPickupDetailsSchema());
+};
+
+const getReceiverUpdateSchema = () => {
+  return Joi.object().keys(getReceiverDetailsSchema());
+};
+
 export default {
   getCreateParelSchema,
   getDeliverytatusSchema,
-  getLocationSchema
+  getLocationSchema,
+  getParcelDetailsSchema,
+  getDestinationUpdateSchema,
+  getPickUpUpdateSchema,
+  getReceiverUpdateSchema
 };
