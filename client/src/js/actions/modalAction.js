@@ -9,6 +9,14 @@ const modalAction = action => dispatch => {
     dispatch({
       type: actionTypes.HIDE_MESSAGE
     });
+  } else if (action.type === actionTypes.IS_SUCCESSFULL) {
+    dispatch({
+      type: actionTypes.SHOW_MESSAGE,
+      payload: {
+        styles: "alert-success",
+        message: action.payload.message
+      }
+    });
   }
 };
 export default modalAction;
