@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import omit from "lodash/omit";
 import Button from "../presentations/Button";
@@ -43,114 +43,14 @@ class CreateParcel extends Places {
       pickUpLGAs: [],
       destinationLGAs: [],
       page: "create",
-      isEditing: false,
       errors: {}
     };
     this.fieldRefs = this.createInputRefs(Object.keys(this.fields));
   }
 
-  componentWillMount() {
-    if (this.state.isEditing) {
-      this.props.processingAction();
-    }
-  }
-
   componentDidMount() {
-    if (this.props.location.pathname !== "/create") {
-      this.fetchParcel(this.props.location.pathname);
-      this.props.processingAction(false);
-    }
     this.fetchStates();
-    this.forceUpdate();
   }
-
-  fetchParcel = async resourcePath => {
-    try {
-      const response = await request.get(resourcePath);
-      const { parcel } = response.data;
-      const { pickUpLGAs } = await this.fetchLGAs(
-        parcel.from.stateId,
-        "pickUpStateId",
-        true
-      );
-      const { destinationLGAs } = await this.fetchLGAs(
-        parcel.from.stateId,
-        "destinationStateId",
-        true
-      );
-      this.setState({
-        ...this.state,
-        isEditing: true,
-        page: "edit",
-        pickUpLGAs,
-        destinationLGAs,
-        fields: {
-          ...this.state.fields,
-          weight: `${parcel.weight}`,
-          description: parcel.description,
-          deliveryMethod: parcel.deliveryMethod,
-          pickUpAddress: parcel.from.address,
-          pickUpStateId: `${parcel.from.stateId}`,
-          pickUpLGAId: `${parcel.from.lgaId}`,
-          destinationAddress: parcel.to.address,
-          destinationStateId: `${parcel.to.stateId}`,
-          destinationLGAId: `${parcel.to.lgaId}`,
-          receiverName: parcel.to.receiver.name,
-          receiverPhone: parcel.to.receiver.phone.substr(-10)
-        }
-      });
-    } catch (error) {
-      messageAction({
-        type: actionTypes.SHOW_MESSAGE,
-        payload: {
-          message: "Something went wrong, could not fetch parcel details"
-        }
-      });
-    }
-  };
-
-  /**
-   * @description Fetch all L.G. Areas of a particular state
-   *
-   * @param {string} stateId the Id of the state
-   * @param {string} name the name of the L.G. Area select field
-   * @param {object} object with the L.G. Area field name and list of all LGAs as key-value pairs
-   */
-  fetchLGAs = async (stateId, name, isEditing) => {
-    try {
-      const fieldName =
-        name === "pickUpStateId" ? "pickUpLGAs" : "destinationLGAs";
-      if (
-        stateId &&
-        (name === "pickUpStateId" || name === "destinationStateId")
-      ) {
-        const response = await request.get(`/states/${stateId}/lgas`);
-        if (response.status === 200) {
-          if (isEditing) {
-            return {
-              [fieldName]: response.data.lgas.map(data => ({
-                lgaId: data.lgaId,
-                lga: data.lga
-              }))
-            };
-          }
-          return {
-            [fieldName]: response.data.lgas
-          };
-        }
-      } else
-        return {
-          [fieldName]: []
-        };
-    } catch (error) {
-      messageAction({
-        type: actionTypes.SHOW_MESSAGE,
-        payload: {
-          message: "Something went wrong, could not load states"
-        }
-      });
-    }
-  };
 
   /**
    * @description Handle an input on change event
@@ -180,28 +80,16 @@ class CreateParcel extends Places {
    */
   done = () => {
     this.props.history.push("/dashboard");
-  };
-
-  /**
-   * @description Create ref for inputs
-   *
-   * @param {array} fields array of fields
-   * @returns {object} object containing the refs
-   */
-  createInputRefs = fields => {
-    const fieldRefs = {};
-    fields.forEach(field => {
-      fieldRefs[field] = React.createRef();
+    this.props.messageAction({
+      type: actionTypes.HIDE_MESSAGE
     });
-    return fieldRefs;
   };
 
-  previewHandler = async event => {
-    event.preventDefault();
+  previewHandler = async () => {
     if (this.state.page === "preview") {
       this.setState({
         ...this.state,
-        page: this.state.isEditing ? "edit" : "create"
+        page: "create"
       });
     } else {
       let validation = await validator("parcel", this.state.fields);
@@ -268,8 +156,7 @@ class CreateParcel extends Places {
   getPageTitle = page => {
     const titles = {
       create: "Create order",
-      preview: "Confirm order details",
-      edit: "Edit parcel"
+      preview: "Confirm order details"
     };
     return titles[page];
   };
@@ -287,14 +174,9 @@ class CreateParcel extends Places {
             saveOrder={this.saveOrder}
           />
         );
-      case "edit":
       case "create":
         return (
-          <Form
-            btnText={this.state.isEditing ? "Save changes" : "Continue"}
-            submitHandler={this.previewHandler}
-            isEditing={this.state.isEditing}
-          >
+          <Form btnText="Continue" submitHandler={this.previewHandler}>
             {this.state.isEditing ? (
               <div className="mb-lg align-right">
                 <button

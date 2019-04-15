@@ -5,7 +5,9 @@ const modalReducer = (
     isShow: false,
     type: "alert",
     size: "modal-sm",
-    isStatic: false
+    isStatic: false,
+    title: "",
+    isSuccessful: false
   },
   action
 ) => {
@@ -16,7 +18,17 @@ const modalReducer = (
         isShow: true,
         type: action.payload.type || "alert",
         size: action.payload.size || "modal-sm",
+        title: action.payload.title || state.title,
         isStatic: action.payload.isStatic || state.isStatic
+      };
+    case actionTypes.IS_SUCCESSFULL:
+      return {
+        ...state,
+        type: "alert",
+        isStatic: false,
+        isShow: true,
+        isSuccessful: true,
+        title: "Successful!"
       };
     case actionTypes.CLOSE_MODAL:
       return {
@@ -24,7 +36,9 @@ const modalReducer = (
         isShow: false,
         type: "alert",
         size: "modal-sm",
-        isStatic: false
+        isStatic: false,
+        title: "",
+        isSuccessful: false
       };
     default:
       return state;

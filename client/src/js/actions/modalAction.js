@@ -5,8 +5,10 @@ const modalAction = action => dispatch => {
     type: action.type,
     payload: action.payload || {}
   });
-  dispatch({
-    type: actionTypes.HIDE_MESSAGE
-  });
+  if (action.type !== actionTypes.IS_SUCCESSFULL) {
+    dispatch({
+      type: actionTypes.HIDE_MESSAGE
+    });
+  }
 };
 export default modalAction;

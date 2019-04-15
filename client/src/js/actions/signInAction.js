@@ -32,7 +32,7 @@ const signInAction = (credentials, history, from) => async dispatch => {
         message:
           error.response && error.response.status < 500
             ? error.response.data.message
-            : "Soemthing went wrong. Sign up  not successful <br /> Pleaese, try again later..."
+            : "Something went wrong. Sign in  not successful <br /> Pleaese, try again later..."
       }
     });
     return false;

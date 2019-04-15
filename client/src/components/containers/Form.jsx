@@ -12,11 +12,11 @@ class Form extends Component {
   };
   onSubmitHandler = async event => {
     event.preventDefault();
-    this.state({
+    this.setState({
       isProcessing: true
     });
     await this.props.submitHandler();
-    this.state({
+    this.setState({
       isProcessing: false
     });
   };
@@ -46,7 +46,7 @@ class Form extends Component {
             btnStyle={`btn btn-primary ${btnStyles}`}
             text={this.state.isProcessing ? "Processing..." : btnText}
             isDisabled={this.state.isProcessing}
-            onClick={submitHandler}
+            onClick={this.onSubmitHandler}
           />
         </div>
       </form>

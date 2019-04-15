@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import Button from "./Button";
 
@@ -11,9 +11,8 @@ const ParcelCard = props => {
     deliveryMethod,
     deliveryStatus,
     createdAt,
-    viewDetails
+    parcelId
   } = props;
-
   return (
     <div className="card">
       <div className="nexted">
@@ -45,11 +44,18 @@ const ParcelCard = props => {
             <span className="bold">Date: </span>
             {createdAt}
           </span>
-          <Button
-            onClick={viewDetails}
-            btnStyle="btn btn-link btn-sm fine-btn"
-            text="Details"
-          />
+          <Link
+            to={{
+              pathname: `/parcels/${parcelId}`,
+              state: {
+                userId: props.userId,
+                isUserParcels: props.isUserParcels
+              }
+            }}
+            className="btn btn-link btn-sm fine-btn"
+          >
+            Details
+          </Link>
         </div>
       </div>
     </div>
@@ -63,6 +69,6 @@ ParcelCard.propTypes = {
   deliveryMethod: PropTypes.string.isRequired,
   deliveryStatus: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
-  viewDetails: PropTypes.func.isRequired
+  viewDetails: PropTypes.func
 };
 export default withRouter(ParcelCard);

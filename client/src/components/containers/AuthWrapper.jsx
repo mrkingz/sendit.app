@@ -79,7 +79,6 @@ const AuthWrapper = (AuthComponent, inComingPops) => {
       if (!validation.hasError && typeof callback === "function") {
         validation = await callback();
       }
-      console.log(validation);
       /**
        * If an input validation fails
        * Update errors in the state with the error detail

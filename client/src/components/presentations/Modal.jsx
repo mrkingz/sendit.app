@@ -6,8 +6,10 @@ import PropTypes from "prop-types";
 import actionTypes from "../../js/actions/actionTypes";
 import modalAction from "../../js/actions/modalAction";
 import ButtonGroup from "./ButtonGroup";
+import Button from "../presentations/Button";
 import AlertMessage from "./AlertMessage";
 import classnames from "classnames";
+import success from "../../../assets/images/success.png";
 
 const Modal = props => {
   const closeModal = e => {
@@ -20,17 +22,37 @@ const Modal = props => {
     });
   };
 
-  const getModalContent = ({ btnText, type, callback }) => {
-    return props.type === "alert" || props.type === "confirm" ? (
+  const alertModal = () => {
+    return (
       <Fragment>
-        {props.children ? props.children : <AlertMessage />}
-        <div className="btn-group align-center">
+        <div className="shake animated align-center my-lg">
+          <AlertMessage />
+        </div>
+        <div
+          className="btn-group align-center"
+          style={{ paddingBottom: ".6rem", paddingTop: ".2rem" }}
+        >
+          <Button
+            btnStyle="btn-primary"
+            text="Close"
+            onClick={e => closeModal(e)}
+          />
+        </div>
+      </Fragment>
+    );
+  };
+
+  const confrimModal = () => {
+    return (
+      <Fragment>
+        {props.children}
+        <div className="btn-group align-center mb-lg">
           <ButtonGroup
             buttonProps={[
               {
-                btnStyles: type === "alert" ? "hide" : props.btnStyles,
-                text: btnText,
-                onClickHandler: callback
+                btnStyles: props.btnStyles,
+                text: props.btnText,
+                onClickHandler: props.onClickHandler
               },
               {
                 btnStyles: "btn-primary",
@@ -41,9 +63,22 @@ const Modal = props => {
           />
         </div>
       </Fragment>
-    ) : (
-      props.children
     );
+  };
+
+  const formModal = () => {
+    return <Fragment>{props.children}</Fragment>;
+  };
+
+  const getModalContent = type => {
+    switch (type) {
+      case "alert":
+        return alertModal();
+      case "confirm":
+        return confrimModal();
+      default:
+        return formModal();
+    }
   };
 
   return (
@@ -62,12 +97,22 @@ const Modal = props => {
           </button>
         </div>
         <div className="modal-body">
-          <div className="modal-title ">{props.title}</div>
-          {getModalContent({
-            btnText: props.btnText,
-            type: props.type,
-            callback: props.onClickHandler
-          })}
+          <div className="modal-title ">
+            {props.isSuccessful && props.type === "alert" ? (
+              <p>
+                <img
+                  className="bounceInDown animated"
+                  src={success}
+                  alt=""
+                  style={{ height: "50px", width: "50px" }}
+                />
+              </p>
+            ) : (
+              ""
+            )}
+            {props.title}
+          </div>
+          {getModalContent(props.type)}
         </div>
       </div>
     </div>
@@ -85,7 +130,8 @@ Modal.propTypes = {
   children: PropTypes.any,
   modalAction: PropTypes.func,
   callback: PropTypes.any,
-  onClickHandler: PropTypes.func
+  onClickHandler: PropTypes.func,
+  isSuccessful: PropTypes.bool
 };
 
 const mapStateToProps = ({ modalReducer }) => {
@@ -93,7 +139,9 @@ const mapStateToProps = ({ modalReducer }) => {
     isShow: modalReducer.isShow,
     size: modalReducer.size,
     type: modalReducer.type,
-    isStatic: modalReducer.isStatic
+    isStatic: modalReducer.isStatic,
+    title: modalReducer.title,
+    isSuccessful: modalReducer.isSuccessful
   };
 };
 export default connect(
