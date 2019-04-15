@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Auth Redirect should render Auth Redirect 1`] = `
+<div
+  className="control-group"
+>
+  <div
+    className="auth-redirect styles"
+  >
+    <span>
+      prompt
+      <Link
+        className="bold auth-link style"
+        replace={false}
+        to="path"
+      >
+        Message
+      </Link>
+    </span>
+  </div>
+</div>
+`;

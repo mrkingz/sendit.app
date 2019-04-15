@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Alert Message should render Alert Message 1`] = `
+<Fragment>
+  <div
+    className="control-group"
+  >
+    <div
+      className="alert style"
+    >
+      Message
+    </div>
+  </div>
+</Fragment>
+`;
+
+exports[`Alert Message should render when there is no message 1`] = `<Fragment />`;

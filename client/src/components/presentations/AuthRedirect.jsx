@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import classnames from "classnames";
 
-const AuthRedirect = ({ text, path, prompt, wrapperStyles, linkStyles }) => {
+export const AuthRedirect = ({
+  text,
+  path,
+  prompt,
+  wrapperStyles,
+  linkStyles
+}) => {
   return (
     <div className="control-group">
       <div className={classnames(`auth-redirect ${wrapperStyles}`)}>
