@@ -243,14 +243,8 @@ class Parcel extends Component {
       parcel: updatedParcel.parcelId ? updatedParcel : this.state.parcel
     });
     this.props.modalAction({
-      type: actionTypes.IS_SUCCESSFULL
-    });
-    this.props.messageAction({
-      type: actionTypes.SHOW_MESSAGE,
-      payload: {
-        styles: "alert-success",
-        message: message
-      }
+      type: actionTypes.IS_SUCCESSFULL,
+      payload: { message: message }
     });
   };
 

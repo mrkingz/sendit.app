@@ -30,7 +30,7 @@ const Modal = props => {
         </div>
         <div
           className="btn-group align-center"
-          style={{ paddingBottom: ".6rem", paddingTop: ".2rem" }}
+          style={{ paddingBottom: ".6rem", paddingTop: ".4rem" }}
         >
           <Button
             btnStyle="btn-primary"
@@ -46,7 +46,10 @@ const Modal = props => {
     return (
       <Fragment>
         {props.children}
-        <div className="btn-group align-center mb-lg">
+        <div
+          className="btn-group align-center mb-lg"
+          style={{ paddingBottom: ".4rem", paddingTop: ".3rem" }}
+        >
           <ButtonGroup
             buttonProps={[
               {

@@ -128,7 +128,10 @@ class CreateParcel extends Places {
       if (response.status === 201) {
         this.setState({
           ...this.state,
-          page: "submitted"
+          fields: this.fields,
+          pickUpLGAs: [],
+          destinationLGAs: [],
+          page: "create"
         });
         this.props.messageAction({
           type: actionTypes.SHOW_MESSAGE,
@@ -147,7 +150,7 @@ class CreateParcel extends Places {
         type: actionTypes.SHOW_MESSAGE,
         payload: {
           styles: "alert-danger",
-          message: "Something went wrong, could not load states"
+          message: "Something went wrong, could not save order details"
         }
       });
     }

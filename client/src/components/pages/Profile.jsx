@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import request from "../../js/utils/request";
 import PageContent from "../containers/PageContent";
 import dropdown from "../../js/utils/script";
@@ -123,7 +124,7 @@ class Profile extends Component {
                           </div>
                         );
                       })}
-                      {/* <FileBrowser uploader={} /> */}
+                      <FileBrowser photoURL={this.state.user.photoURL} />
                     </div>
                   </div>
                 </div>
@@ -143,6 +144,9 @@ class Profile extends Component {
     );
   }
 }
+Profile.propTypes = {
+  processingAction: PropTypes.func
+};
 const mapStateToProps = ({ profileReducer }) => {
   return {
     user: profileReducer.user
