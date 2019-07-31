@@ -103,23 +103,28 @@ class FileBrowser extends Component {
         ) : (
           ""
         )}
-        <Modal
-          btnText="Proceed"
-          btnStyles="btn-primary"
-          onClickHandler={() => this.removePhoto(true)}
-        >
-          <div className="alert warning">
-            <b>Are you sure you want to remove profile photo?</b>
-            <br />
-            Click proceed to confirm this operation
-          </div>
-        </Modal>
+        {this.props.canOpenModal ? (
+          <Modal
+            btnText="Proceed"
+            btnStyles="btn-primary"
+            onClickHandler={() => this.removePhoto(true)}
+          >
+            <div className="alert warning">
+              <b>Are you sure you want to remove profile photo?</b>
+              <br />
+              Click proceed to confirm this operation
+            </div>
+          </Modal>
+        ) : (
+          ""
+        )}
       </Fragment>
     );
   }
 }
 
 FileBrowser.propTypes = {
+  canOpenModal: PropTypes.bool,
   photoURL: PropTypes.string,
   modalAction: PropTypes.func,
   messageAction: PropTypes.func

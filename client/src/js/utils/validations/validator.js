@@ -33,6 +33,7 @@ const getSchema = type => {
   const schemas = {
     signup: UserSchemas.getSignUpSchema(),
     signin: UserSchemas.getSignInSchema(),
+    password: UserSchemas.getPasswordSchema(),
     parcel: ParcelSchemas.getCreateParelSchema(),
     status: ParcelSchemas.getDeliverytatusSchema(),
     location: ParcelSchemas.getLocationSchema(),

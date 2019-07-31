@@ -85,6 +85,11 @@ class CreateParcel extends Places {
     });
   };
 
+  /**
+   * @description Toggles preview and create parcel page
+   *
+   * @memberof CreateParcel
+   */
   previewHandler = async () => {
     if (this.state.page === "preview") {
       this.setState({
@@ -118,7 +123,7 @@ class CreateParcel extends Places {
   };
 
   /**
-   * @description Save the parcel delivery order
+   * @description Saves the parcel delivery order
    *
    * @returns void
    */
@@ -131,7 +136,7 @@ class CreateParcel extends Places {
           fields: this.fields,
           pickUpLGAs: [],
           destinationLGAs: [],
-          page: "create"
+          page: "submitted"
         });
         this.props.messageAction({
           type: actionTypes.SHOW_MESSAGE,
@@ -156,12 +161,18 @@ class CreateParcel extends Places {
     }
   };
 
+  /**
+   * @description Gets the page title
+   *
+   * @param {String} page the current page option
+   * @memberof CreateParcel
+   */
   getPageTitle = page => {
     const titles = {
       create: "Create order",
       preview: "Confirm order details"
     };
-    return titles[page];
+    return titles[page] || "Create order";
   };
 
   getPage = page => {
