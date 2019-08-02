@@ -3,8 +3,9 @@ import omit from "lodash/omit";
 import request from "../../js/utils/request";
 import messageAction from "../../js/actions/messageAction";
 import actionTypes from "../../js/actions/actionTypes";
+import BaseComponent from "./BaseComponent";
 
-class Places extends Component {
+class Places extends BaseComponent {
   constructor(props) {
     super(props);
   }
@@ -98,20 +99,6 @@ class Places extends Component {
         [name]: value
       }
     });
-  };
-
-  /**
-   * @description Create ref for inputs
-   *
-   * @param {array} fields array of fields
-   * @returns {object} object containing the refs
-   */
-  createInputRefs = fields => {
-    const fieldRefs = {};
-    fields.forEach(field => {
-      fieldRefs[field] = React.createRef();
-    });
-    return fieldRefs;
   };
 }
 export default Places;

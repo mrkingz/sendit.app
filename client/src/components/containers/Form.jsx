@@ -55,7 +55,8 @@ class Form extends Component {
 }
 
 Form.defaultProps = {
-  formStyles: ""
+  formStyles: "",
+  requiredStyles: "hide"
 };
 
 Form.propTypes = {

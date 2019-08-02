@@ -49,7 +49,6 @@ class UpdateReceiver extends Places {
   updateReceiver = async () => {
     try {
       const validation = await validator("receiver", this.state.fields);
-      console.log(this.state.fields);
       if (validation.hasError) {
         this.setState({
           ...this.state,

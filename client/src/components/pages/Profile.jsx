@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import Modal from "../presentations/Modal";
 import request from "../../js/utils/request";
 import PageContent from "../containers/PageContent";
 import dropdown from "../../js/utils/script";
@@ -8,13 +9,17 @@ import avatar from "../../../assets/images/avatar.png";
 import FileBrowser from "../presentations/FileBrowser";
 import processingAction from "../../js/actions/processingAction";
 import UserOrders from "../presentations/UserOrders";
+import actionTypes from "../../js/actions/actionTypes";
+import modalAction from "../../js/actions/modalAction";
+import ChangePassword from "../presentations/ChangePassword";
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      isFetching: true
+      isFetching: true,
+      editorType: null
     };
   }
   componentWillMount() {
@@ -38,9 +43,44 @@ class Profile extends Component {
     }
   };
 
-  editNameModal = () => {};
-  updatePhoneModal = () => {};
-  changePasswordModal = () => {};
+  getTitle = option => {
+    const titles = {
+      name: "Update name",
+      phone: "Update phone number",
+      password: "Change password"
+    };
+    return titles[option];
+  };
+
+  showModal = option => {
+    this.setState({
+      ...this.state,
+      editorType: option
+    });
+    this.props.modalAction({
+      type: actionTypes.SHOW_MODAL,
+      payload: {
+        title: this.getTitle(option),
+        type: option === "confirm" ? "confirm" : "form",
+        btnText: option === "confirm" ? "Proceed" : ""
+      }
+    });
+  };
+
+  displayModal = () => {
+    const modalContents = {
+      password: this.getChangePasswordModalContent()
+    };
+    return (
+      <Modal btnStyles="btn-primary">
+        {modalContents[this.state.editorType]}
+      </Modal>
+    );
+  };
+
+  getChangePasswordModalContent = () => {
+    return <ChangePassword user={this.state.user} />;
+  };
 
   render() {
     const fieldNames = [
@@ -55,7 +95,7 @@ class Profile extends Component {
           <div className="section-x">
             <div className="row no-gutters">
               <div className="col-12">
-                <div className="dropdown hide">
+                <div className="dropdown">
                   <button
                     onClick={() => dropdown("menu")}
                     className="btn btn-link dropbtn btn-sm size-13 fine-btn"
@@ -66,19 +106,22 @@ class Profile extends Component {
                     id="menu"
                     className="dropdown-content size-11 dropdown-content-mini"
                   >
-                    <button className="menu-btn" onClick={this.editNameModal()}>
+                    <button
+                      className="menu-btn"
+                      onClick={() => this.showModal("name")}
+                    >
                       Update name
                     </button>
                     <button
                       className="menu-btn"
                       id="phone-btn"
-                      onClick={this.updatePhoneModal()}
+                      onClick={() => this.showModal("phone")}
                     >
                       Update phone number
                     </button>
                     <button
                       className="menu-btn"
-                      onClick={this.changePasswordModal("event, user")}
+                      onClick={() => this.showModal("password")}
                     >
                       Change password
                     </button>
@@ -124,10 +167,14 @@ class Profile extends Component {
                           </div>
                         );
                       })}
-                      <FileBrowser photoURL={this.state.user.photoURL} />
+                      <FileBrowser
+                        photoURL={this.state.user.photoURL}
+                        canOpenModal={!this.state.editorType}
+                      />
                     </div>
                   </div>
                 </div>
+                {this.props.isShow ? this.displayModal() : ""}
                 {this.state.isFetching ? (
                   ""
                 ) : (
@@ -145,16 +192,19 @@ class Profile extends Component {
   }
 }
 Profile.propTypes = {
-  processingAction: PropTypes.func
+  processingAction: PropTypes.func,
+  modalAction: PropTypes.func
 };
-const mapStateToProps = ({ profileReducer }) => {
+const mapStateToProps = ({ profileReducer, modalReducer }) => {
   return {
-    user: profileReducer.user
+    user: profileReducer.user,
+    isShow: modalReducer.isShow
   };
 };
 export default connect(
   mapStateToProps,
   {
+    modalAction,
     processingAction
   }
 )(Profile);

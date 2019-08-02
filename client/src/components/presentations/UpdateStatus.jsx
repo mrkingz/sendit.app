@@ -52,9 +52,9 @@ class UpdateStatus extends Component {
     }
   };
 
-  onChangeHandler = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
+  onChangeHandler = event => {
+    event.preventDefault();
+    const { name, value } = event.target;
     this.setState({
       [name]: value,
       error: {}
@@ -67,7 +67,6 @@ class UpdateStatus extends Component {
         <Form
           btnText="Save"
           btnStyles="btn-block"
-          requiredStyles="hide"
           submitHandler={this.submitHandler}
         >
           <SelectField
