@@ -24,8 +24,10 @@ class Parcels extends Component {
   }
 
   getPath = () => {
-    const { isUserParcels, userId } = this.props.location.state;
-    return isUserParcels ? `/users/${userId}/parcels` : "/parcels";
+    const { isUserParcels } = this.props.location.state;
+    return isUserParcels
+      ? `/users/${this.props.user.userId}/parcels`
+      : "/parcels";
   };
 
   fetchParcels = async filter => {
@@ -134,8 +136,8 @@ class Parcels extends Component {
               <ParcelCard
                 key={index}
                 {...parcel}
-                userId={userId}
-                isUserParcels={isUserParcels}
+                userId={Number(userId)}
+                isUserParcels={Boolean(isUserParcels)}
                 parcelId={parcel.parcelId}
               />
             );
@@ -156,15 +158,19 @@ class Parcels extends Component {
 Parcels.propTypes = {
   messageAction: PropTypes.func.isRequired,
   processingAction: PropTypes.func.isRequired,
+  isUserParcels: PropTypes.bool,
   modalAction: PropTypes.func,
   parcelAction: PropTypes.func,
-  isShow: PropTypes.bool
+  isShow: PropTypes.bool,
+  location: PropTypes.object,
+  user: PropTypes.object
 };
 
-const mapStateToProps = ({ messageReducer, modalReducer }) => {
+const mapStateToProps = ({ messageReducer, modalReducer, profileReducer }) => {
   return {
     message: messageReducer.message,
-    isShow: modalReducer.isShow
+    isShow: modalReducer.isShow,
+    user: profileReducer.user
   };
 };
 export default connect(

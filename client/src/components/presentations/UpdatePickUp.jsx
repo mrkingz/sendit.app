@@ -89,7 +89,7 @@ class UpdatePickUp extends Places {
     } else return [];
   };
 
-  updatepickUp = async () => {
+  updatePickUp = async () => {
     try {
       const validation = await validator("pickup", this.state.fields);
       if (validation.hasError) {
@@ -113,7 +113,6 @@ class UpdatePickUp extends Places {
         this.props.renderUpdate(parcel, message);
       }
     } catch (error) {
-      console.log(error);
       this.props.messageAction({
         type: actionTypes.SHOW_MESSAGE,
         payload: {
@@ -132,7 +131,7 @@ class UpdatePickUp extends Places {
           btnText="Save"
           btnStyles="btn-block"
           requiredStyles="hide"
-          submitHandler={this.updatepickUp}
+          submitHandler={this.updatePickUp}
         >
           <TextInput
             name="pickUpAddress"

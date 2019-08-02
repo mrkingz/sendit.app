@@ -9,6 +9,9 @@ const UserOrders = props => {
     { placed: "Placed orders" },
     { total: "Total orders" }
   ];
+
+  const getDataKey = data => Object.keys(data)[0];
+
   return (
     <div className="row">
       <div className="col-12">
@@ -27,20 +30,20 @@ const UserOrders = props => {
                       <div className="card-row" key={index}>
                         <div
                           className={`data-header ${
-                            Object.keys(data)[0] === "total" ? "bold total" : ""
+                            getDataKey(data) === "total" ? "bold total" : ""
                           }`}
                         >
                           {Object.values(data)[0]}
                         </div>
                         <div
                           className={`${
-                            Object.keys(data)[0] === "total"
+                            getDataKey(data) === "total"
                               ? "bold red-color total"
                               : ""
                           }`}
                           id="data-cancelled"
                         >
-                          {props.orders[Object.keys(data)[0]]}
+                          {props.orders[getDataKey(data)]}
                         </div>
                       </div>
                     );

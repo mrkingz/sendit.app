@@ -12,9 +12,10 @@ import classnames from "classnames";
 import success from "../../../assets/images/success.png";
 
 const Modal = props => {
-  const closeModal = e => {
-    e.persist();
-    if (e.target.classList.contains("static") || e.target !== e.currentTarget) {
+  const closeModal = event => {
+    event.persist();
+    const { target, currentTarget } = event;
+    if (target.classList.contains("static") || target !== currentTarget) {
       return;
     }
     props.modalAction({
@@ -25,7 +26,7 @@ const Modal = props => {
   const alertModal = () => {
     return (
       <Fragment>
-        <div className="shake animated align-center my-lg">
+        <div className="align-center my-lg">
           <AlertMessage />
         </div>
         <div
@@ -42,7 +43,7 @@ const Modal = props => {
     );
   };
 
-  const confrimModal = () => {
+  const confirmModal = () => {
     return (
       <Fragment>
         {props.children}
@@ -78,7 +79,7 @@ const Modal = props => {
       case "alert":
         return alertModal();
       case "confirm":
-        return confrimModal();
+        return confirmModal();
       default:
         return formModal();
     }

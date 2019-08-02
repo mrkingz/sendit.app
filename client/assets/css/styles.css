@@ -702,6 +702,10 @@ button.menu-btn {
     font-weight: bold;
 }
 
+.data-name {
+    text-transform: capitalize;
+}
+
 .data-value {
     font-size: .75rem;
     margin: .2rem;
@@ -1414,12 +1418,24 @@ option:first-of-type {
     padding-right: .6rem;
 }
 
+.pt-0 {
+    padding-top: 0 !important;
+}
+
 
 .more-details {
     background: rgb(247, 247, 250);
     padding: .7rem .5rem;
     margin-top: .4rem;
     margin-bottom: .4rem;
+}
+
+.resend-div {
+    text-align: right;
+    font-size: 11px;
+    padding: 0 18px 16px;
+    background-color: #eeeef5
+
 }
 
 .nav-menu {
@@ -1541,7 +1557,7 @@ select option {
 }
 
 .size-11 {
-    font-size: 11px;
+    font-size: 11px !important;
 }
 
 .size-12 {

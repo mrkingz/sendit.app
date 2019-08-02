@@ -1,61 +1,159 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import request from "../../js/utils/request";
+import Modal from "../presentations/Modal";
 import PageContent from "../containers/PageContent";
 import dropdown from "../../js/utils/script";
 import avatar from "../../../assets/images/avatar.png";
 import FileBrowser from "../presentations/FileBrowser";
+import BaseComponent from "../globals/BaseComponent";
 import processingAction from "../../js/actions/processingAction";
 import UserOrders from "../presentations/UserOrders";
+import actionTypes from "../../js/actions/actionTypes";
+import modalAction from "../../js/actions/modalAction";
+import ChangePassword from "../presentations/ChangePassword";
+import messageAction from "../../js/actions/messageAction";
+import updateProfileAction from "../../js/actions/updateProfileAction";
+import UpdateName from "../presentations/UpdateName";
+import UpdatePhoneNumber from "../presentations/UpdatePhoneNumber";
+import classnames from "classnames";
 
-class Profile extends Component {
+class Profile extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      isFetching: true
+      editorType: null,
+      canOpedEditModal: false
     };
   }
-  componentWillMount() {
-    this.props.processingAction();
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    if (prevProps.user !== prevState.user) {
+      return { ...prevState, user: prevProps.user };
+    }
+    return null;
   }
 
-  async componentDidMount() {
-    await this.fetchOrderHistory();
-    this.props.processingAction(false);
-  }
+  /**
+   * @description Get the appropriate modal title
+   *
+   * @param {String} option the edit modal type
+   * @memberof Profile
+   */
+  getTitle = option => {
+    const titles = {
+      name: "Update name",
+      phoneNumber: "Update phone number",
+      password: "Change password"
+    };
+    return titles[option];
+  };
 
-  fetchOrderHistory = async () => {
-    try {
-      const response = await request.get("/auth/profileDetails");
-      this.setState({
-        user: response.data.user,
-        isFetching: false
+  showModal = option => {
+    this.setState({
+      ...this.state,
+      canOpedEditModal: true,
+      editorType: option
+    });
+    this.props.modalAction({
+      type: actionTypes.SHOW_MODAL,
+      payload: {
+        title: this.getTitle(option),
+        type: option === "confirm" ? "confirm" : "form",
+        btnText: option === "confirm" ? "Proceed" : ""
+      }
+    });
+  };
+
+  displayModal = () => {
+    const modalContents = {
+      name: this.getUpdateNameModalConetent(),
+      password: this.getChangePasswordModalContent(),
+      phoneNumber: this.getUpdatePhoneNumberModalContent()
+    };
+    return (
+      <Modal btnStyles="btn-primary">
+        {modalContents[this.state.editorType]}
+      </Modal>
+    );
+  };
+
+  getChangePasswordModalContent = () => {
+    return <ChangePassword user={this.state.user} />;
+  };
+
+  getUpdateNameModalConetent = () => {
+    return (
+      <UpdateName user={this.state.user} renderUpdate={this.renderUpdate} />
+    );
+  };
+
+  getUpdatePhoneNumberModalContent = () => {
+    return (
+      <UpdatePhoneNumber
+        user={this.state.user}
+        renderUpdate={this.renderUpdate}
+      />
+    );
+  };
+
+  /**
+   * @description Renders user details with the updated value
+   *
+   * @memberof Profile
+   */
+  renderUpdate = (updatedUser, message) => {
+    this.setState({
+      ...this.state,
+      user: { ...this.state.user, ...updatedUser }
+    });
+
+    this.props.updateProfileAction({
+      type: actionTypes.UPDATE_USER,
+      payload: { user: updatedUser }
+    });
+    if (message) {
+      this.props.modalAction({
+        type: actionTypes.IS_SUCCESSFUL,
+        payload: { message }
       });
-    } catch (error) {
-      //
     }
   };
 
-  editNameModal = () => {};
-  updatePhoneModal = () => {};
-  changePasswordModal = () => {};
+  getKeyFromData = data => Object.keys(data)[0];
 
-  render() {
+  getPhotoURL = () => {
+    const { tempPhoto, photoURL } = this.state.user;
+    if (tempPhoto) {
+      return tempPhoto;
+    }
+    return photoURL ? photoURL : avatar;
+  };
+
+  stopOpenEditModal = () => {
+    this.setState({
+      ...this.state,
+      canOpedEditModal: false
+    });
+  };
+
+  render = () => {
     const fieldNames = [
       { firstname: "First name" },
       { lastname: "Last name" },
       { email: "Email address" },
       { phoneNumber: " Phone number" }
     ];
+    const { isShow } = this.props;
+    const { user } = this.state;
     return (
       <PageContent pageTitle="Profile details">
         <div className="panel">
           <div className="section-x">
             <div className="row no-gutters">
               <div className="col-12">
-                <div className="dropdown hide">
+                <div className="dropdown">
                   <button
                     onClick={() => dropdown("menu")}
                     className="btn btn-link dropbtn btn-sm size-13 fine-btn"
@@ -66,19 +164,22 @@ class Profile extends Component {
                     id="menu"
                     className="dropdown-content size-11 dropdown-content-mini"
                   >
-                    <button className="menu-btn" onClick={this.editNameModal()}>
+                    <button
+                      className="menu-btn"
+                      onClick={() => this.showModal("name")}
+                    >
                       Update name
                     </button>
                     <button
                       className="menu-btn"
                       id="phone-btn"
-                      onClick={this.updatePhoneModal()}
+                      onClick={() => this.showModal("phoneNumber")}
                     >
                       Update phone number
                     </button>
                     <button
                       className="menu-btn"
-                      onClick={this.changePasswordModal("event, user")}
+                      onClick={() => this.showModal("password")}
                     >
                       Change password
                     </button>
@@ -94,11 +195,7 @@ class Profile extends Component {
                       <div className="align-center avatar-div">
                         <img
                           id="image"
-                          src={
-                            this.state.user.photoURL
-                              ? this.state.user.photoURL
-                              : avatar
-                          }
+                          src={this.getPhotoURL()}
                           alt=""
                           className="avatar"
                         />
@@ -111,50 +208,70 @@ class Profile extends Component {
                         return (
                           <div key={index} className="data-row">
                             <label
-                              htmlFor={Object.keys(data)[0]}
+                              htmlFor={this.getKeyFromData(data)}
                               className="data-label"
                             >
                               {Object.values(data)[0]}
                             </label>
-                            <div className="data-value" id="data-firstname">
-                              {this.state.user[Object.keys(data)[0]]
-                                ? this.state.user[Object.keys(data)[0]]
+                            <div
+                              className={classnames("data-value", {
+                                "data-name":
+                                  this.getKeyFromData(data).indexOf("name") > -1
+                              })}
+                            >
+                              {user[this.getKeyFromData(data)]
+                                ? user[this.getKeyFromData(data)]
                                 : "--"}
                             </div>
                           </div>
                         );
                       })}
-                      <FileBrowser photoURL={this.state.user.photoURL} />
+                      {user.hasOwnProperty("photoURL") ? (
+                        <FileBrowser
+                          user={user}
+                          renderUpdate={this.renderUpdate}
+                          canOpedEditModal={!this.state.canOpedEditModal}
+                          stopOpenEditModal={this.stopOpenEditModal}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>
-                {this.state.isFetching ? (
-                  ""
-                ) : (
-                  <UserOrders
-                    userId={this.state.user.userId}
-                    orders={this.state.user.orders}
-                  />
-                )}
+                {isShow && this.state.canOpedEditModal
+                  ? this.displayModal()
+                  : ""}
+                {user.orders ? (
+                  <UserOrders userId={user.userId} orders={user.orders} />
+                ) : null}
               </div>
             </div>
           </div>
         </div>
       </PageContent>
     );
-  }
+  };
 }
+
 Profile.propTypes = {
-  processingAction: PropTypes.func
+  isShow: PropTypes.bool,
+  processingAction: PropTypes.func,
+  modalAction: PropTypes.func,
+  messageAction: PropTypes.func
 };
-const mapStateToProps = ({ profileReducer }) => {
+const mapStateToProps = ({ modalReducer, profileReducer }) => {
   return {
+    isShow: modalReducer.isShow,
     user: profileReducer.user
   };
 };
 export default connect(
   mapStateToProps,
   {
-    processingAction
+    modalAction,
+    processingAction,
+    messageAction,
+    updateProfileAction
   }
 )(Profile);

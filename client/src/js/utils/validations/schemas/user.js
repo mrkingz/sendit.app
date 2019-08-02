@@ -202,5 +202,7 @@ const getSignInSchema = () => {
 export default {
   getSignUpSchema,
   getSignInSchema,
-  getPhoneSchema
+  getPhoneSchema,
+  getNameSchema,
+  getPasswordSchema
 };

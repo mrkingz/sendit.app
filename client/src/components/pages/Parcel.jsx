@@ -25,7 +25,8 @@ class Parcel extends Component {
     this.state = {
       parcel: {},
       editorType: "",
-      isFetching: true
+      isFetching: true,
+      location: this.props.location.state
     };
   }
 
@@ -35,19 +36,22 @@ class Parcel extends Component {
   }
 
   getPath = () => {
-    const { isUserParcels, userId } = this.props.location.state;
-    const { parcelId } = this.props.match.params;
-    return isUserParcels
-      ? `/users/${userId}/parcels/${parcelId}`
-      : `/parcels/${parcelId}`;
+    const {
+      user: { userId },
+      match: { params },
+      location: { pathname }
+    } = this.props;
+    return pathname.indexOf("users") > -1
+      ? `/users/${userId}/parcels/${params.parcelId}`
+      : `/parcels/${params.parcelId}`;
   };
 
   fetchParcel = async () => {
     try {
-      const response = await request.get(this.getPath());
+      const { data } = await request.get(this.getPath());
       this.setState({
         ...this.state,
-        parcel: response.data.parcel,
+        parcel: data.parcel,
         isFetching: false
       });
     } catch (error) {
@@ -120,18 +124,22 @@ class Parcel extends Component {
     return titles[option];
   };
 
-  getModalContent = () => {
+  displayModal = () => {
     const { parcel, editorType } = this.state;
-    const modals = {
-      confirm: this.getCancelModal(),
-      status: this.getStatusModal(parcel),
-      location: this.getLocationModal(parcel),
-      details: this.getParcelDetailsModal(parcel),
-      destination: this.getDestinationModal(parcel),
-      pickup: this.getPickUpModal(parcel),
-      receiver: this.getReceiverModal(parcel)
+    const modalContents = {
+      status: this.getStatusModalContent(parcel),
+      location: this.getLocationModalContent(parcel),
+      details: this.getParcelDetailsModalContent(parcel),
+      destination: this.getDestinationModalContent(parcel),
+      pickup: this.getPickUpModalContent(parcel),
+      receiver: this.getReceiverModalContent(parcel)
     };
-    return modals[editorType];
+
+    return editorType === "confirm" ? (
+      this.getCancelModal()
+    ) : (
+      <Modal btnStyles="btn-primary">{modalContents[editorType]}</Modal>
+    );
   };
 
   getCancelModal = () => {
@@ -150,82 +158,70 @@ class Parcel extends Component {
     );
   };
 
-  getParcelDetailsModal = parcel => {
+  getParcelDetailsModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary">
-        <UpdateParcelDetails
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          weight={`${parcel.weight}`}
-          description={parcel.description}
-          deliveryMethod={parcel.deliveryMethod}
-        />
-      </Modal>
+      <UpdateParcelDetails
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        weight={`${parcel.weight}`}
+        description={parcel.description}
+        deliveryMethod={parcel.deliveryMethod}
+      />
     );
   };
 
-  getStatusModal = parcel => {
+  getStatusModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary">
-        <UpdateStatus
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          location={parcel.deliveryStatus}
-        />
-      </Modal>
+      <UpdateStatus
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        location={parcel.deliveryStatus}
+      />
     );
   };
 
-  getDestinationModal = parcel => {
+  getDestinationModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary" title={"Update location"}>
-        <UpdateDestination
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          destinationAddress={parcel.to.address}
-          destinationStateId={parcel.to.stateId}
-          destinationLGAId={parcel.to.lgaId}
-        />
-      </Modal>
+      <UpdateDestination
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        destinationAddress={parcel.to.address}
+        destinationStateId={parcel.to.stateId}
+        destinationLGAId={parcel.to.lgaId}
+      />
     );
   };
 
-  getPickUpModal = parcel => {
+  getPickUpModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary" title={"Update location"}>
-        <UpdatePickUp
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          pickUpAddress={parcel.from.address}
-          pickUpStateId={parcel.from.stateId}
-          pickUpLGAId={parcel.from.lgaId}
-        />
-      </Modal>
+      <UpdatePickUp
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        pickUpAddress={parcel.from.address}
+        pickUpStateId={parcel.from.stateId}
+        pickUpLGAId={parcel.from.lgaId}
+      />
     );
   };
 
-  getLocationModal = parcel => {
+  getLocationModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary">
-        <UpdateLocation
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          location={parcel.presentLocation}
-        />
-      </Modal>
+      <UpdateLocation
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        location={parcel.presentLocation}
+      />
     );
   };
 
-  getReceiverModal = parcel => {
+  getReceiverModalContent = parcel => {
     return (
-      <Modal btnStyles="btn-primary">
-        <UpdateReceiver
-          renderUpdate={this.renderUpdate}
-          parcelId={parcel.parcelId}
-          receiverName={parcel.to.receiver.name}
-          receiverPhone={parcel.to.receiver.phone}
-        />
-      </Modal>
+      <UpdateReceiver
+        renderUpdate={this.renderUpdate}
+        parcelId={parcel.parcelId}
+        receiverName={parcel.to.receiver.name}
+        receiverPhone={parcel.to.receiver.phone}
+      />
     );
   };
 
@@ -243,9 +239,13 @@ class Parcel extends Component {
       parcel: updatedParcel.parcelId ? updatedParcel : this.state.parcel
     });
     this.props.modalAction({
-      type: actionTypes.IS_SUCCESSFULL,
+      type: actionTypes.IS_SUCCESSFUL,
       payload: { message: message }
     });
+  };
+
+  getURLParam = () => {
+    return this.props.location.pathname.split("/").pop();
   };
 
   render() {
@@ -267,19 +267,17 @@ class Parcel extends Component {
       ...rest
     } = this.state.parcel;
     return (
-      <PageContent pageTitle="Parcel details">
+      <PageContent pageTitle="Parcel details" hasContent={!!trackingNo}>
         <div className="panel">
           <div className="section-x">
             <Link
               className="btn btn-link normal size-13"
               style={{ color: "rgb(59, 156, 252)" }}
               to={{
-                pathname: this.props.location.state.isUserParcels
-                  ? "/users/parcels"
-                  : "/parcels",
+                pathname: this.getURLParam() ? "/users/parcels" : "/parcels",
                 state: {
-                  userId: this.props.location.state.userId,
-                  isUserParcels: this.props.location.state.isUserParcels
+                  userId: this.getURLParam(),
+                  isUserParcels: this.getURLParam()
                 }
               }}
             >
@@ -442,7 +440,7 @@ class Parcel extends Component {
             />
           )}
         </div>
-        {this.props.isShow ? this.getModalContent() : ""}
+        {this.props.isShow ? this.displayModal() : ""}
         {this.props.isShow ? (
           ""
         ) : (
@@ -456,6 +454,9 @@ class Parcel extends Component {
 }
 
 Parcel.propTypes = {
+  user: PropTypes.object,
+  match: PropTypes.object,
+  location: PropTypes.object,
   isShow: PropTypes.bool,
   messageAction: PropTypes.func.isRequired,
   processingAction: PropTypes.func.isRequired,

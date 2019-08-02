@@ -76,7 +76,7 @@ class UpdateParcelDetails extends Component {
         type: actionTypes.SHOW_MESSAGE,
         payload: {
           styles: "alert-danger",
-          message: error.response.message //"Something went wrong, could not update location"
+          message: error.response.message
         }
       });
     }
@@ -89,7 +89,6 @@ class UpdateParcelDetails extends Component {
         <Form
           btnText="Save"
           btnStyles="btn-block"
-          requiredStyles="hide"
           submitHandler={this.updateDetails}
         >
           <TextInput
@@ -153,11 +152,11 @@ class UpdateParcelDetails extends Component {
 
 UpdateParcelDetails.propTypes = {
   weight: PropTypes.string,
-  description: PropTypes.description,
+  description: PropTypes.string,
   deliveryMethod: PropTypes.string,
   messageAction: PropTypes.func,
   renderUpdate: PropTypes.func,
-  parcelId: PropTypes.string
+  parcelId: PropTypes.number
 };
 export default connect(
   null,
