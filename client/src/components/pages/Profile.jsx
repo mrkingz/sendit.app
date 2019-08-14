@@ -1,52 +1,50 @@
-import React, { Component, Fragment } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Modal from "../presentations/Modal";
-import request from "../../js/utils/request";
 import PageContent from "../containers/PageContent";
 import dropdown from "../../js/utils/script";
 import avatar from "../../../assets/images/avatar.png";
 import FileBrowser from "../presentations/FileBrowser";
+import BaseComponent from "../globals/BaseComponent";
 import processingAction from "../../js/actions/processingAction";
 import UserOrders from "../presentations/UserOrders";
 import actionTypes from "../../js/actions/actionTypes";
 import modalAction from "../../js/actions/modalAction";
 import ChangePassword from "../presentations/ChangePassword";
+import messageAction from "../../js/actions/messageAction";
+import updateProfileAction from "../../js/actions/updateProfileAction";
+import UpdateName from "../presentations/UpdateName";
+import UpdatePhoneNumber from "../presentations/UpdatePhoneNumber";
+import classnames from "classnames";
 
-class Profile extends Component {
+class Profile extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      isFetching: true,
-      editorType: null
+      editorType: null,
+      canOpedEditModal: false
     };
   }
-  componentWillMount() {
-    this.props.processingAction();
-  }
 
-  async componentDidMount() {
-    await this.fetchOrderHistory();
-    this.props.processingAction(false);
-  }
-
-  fetchOrderHistory = async () => {
-    try {
-      const response = await request.get("/auth/profileDetails");
-      this.setState({
-        user: response.data.user,
-        isFetching: false
-      });
-    } catch (error) {
-      //
+  static getDerivedStateFromProps(prevProps, prevState) {
+    if (prevProps.user !== prevState.user) {
+      return { ...prevState, user: prevProps.user };
     }
-  };
+    return null;
+  }
 
+  /**
+   * @description Get the appropriate modal title
+   *
+   * @param {String} option the edit modal type
+   * @memberof Profile
+   */
   getTitle = option => {
     const titles = {
       name: "Update name",
-      phone: "Update phone number",
+      phoneNumber: "Update phone number",
       password: "Change password"
     };
     return titles[option];
@@ -55,6 +53,7 @@ class Profile extends Component {
   showModal = option => {
     this.setState({
       ...this.state,
+      canOpedEditModal: true,
       editorType: option
     });
     this.props.modalAction({
@@ -69,7 +68,9 @@ class Profile extends Component {
 
   displayModal = () => {
     const modalContents = {
-      password: this.getChangePasswordModalContent()
+      name: this.getUpdateNameModalConetent(),
+      password: this.getChangePasswordModalContent(),
+      phoneNumber: this.getUpdatePhoneNumberModalContent()
     };
     return (
       <Modal btnStyles="btn-primary">
@@ -82,13 +83,70 @@ class Profile extends Component {
     return <ChangePassword user={this.state.user} />;
   };
 
-  render() {
+  getUpdateNameModalConetent = () => {
+    return (
+      <UpdateName user={this.state.user} renderUpdate={this.renderUpdate} />
+    );
+  };
+
+  getUpdatePhoneNumberModalContent = () => {
+    return (
+      <UpdatePhoneNumber
+        user={this.state.user}
+        renderUpdate={this.renderUpdate}
+      />
+    );
+  };
+
+  /**
+   * @description Renders user details with the updated value
+   *
+   * @memberof Profile
+   */
+  renderUpdate = (updatedUser, message) => {
+    this.setState({
+      ...this.state,
+      user: { ...this.state.user, ...updatedUser }
+    });
+
+    this.props.updateProfileAction({
+      type: actionTypes.UPDATE_USER,
+      payload: { user: updatedUser }
+    });
+    if (message) {
+      this.props.modalAction({
+        type: actionTypes.IS_SUCCESSFUL,
+        payload: { message }
+      });
+    }
+  };
+
+  getKeyFromData = data => Object.keys(data)[0];
+
+  getPhotoURL = () => {
+    const { tempPhoto, photoURL } = this.state.user;
+    if (tempPhoto) {
+      return tempPhoto;
+    }
+    return photoURL ? photoURL : avatar;
+  };
+
+  stopOpenEditModal = () => {
+    this.setState({
+      ...this.state,
+      canOpedEditModal: false
+    });
+  };
+
+  render = () => {
     const fieldNames = [
       { firstname: "First name" },
       { lastname: "Last name" },
       { email: "Email address" },
       { phoneNumber: " Phone number" }
     ];
+    const { isShow } = this.props;
+    const { user } = this.state;
     return (
       <PageContent pageTitle="Profile details">
         <div className="panel">
@@ -115,7 +173,7 @@ class Profile extends Component {
                     <button
                       className="menu-btn"
                       id="phone-btn"
-                      onClick={() => this.showModal("phone")}
+                      onClick={() => this.showModal("phoneNumber")}
                     >
                       Update phone number
                     </button>
@@ -137,11 +195,7 @@ class Profile extends Component {
                       <div className="align-center avatar-div">
                         <img
                           id="image"
-                          src={
-                            this.state.user.photoURL
-                              ? this.state.user.photoURL
-                              : avatar
-                          }
+                          src={this.getPhotoURL()}
                           alt=""
                           className="avatar"
                         />
@@ -154,57 +208,70 @@ class Profile extends Component {
                         return (
                           <div key={index} className="data-row">
                             <label
-                              htmlFor={Object.keys(data)[0]}
+                              htmlFor={this.getKeyFromData(data)}
                               className="data-label"
                             >
                               {Object.values(data)[0]}
                             </label>
-                            <div className="data-value" id="data-firstname">
-                              {this.state.user[Object.keys(data)[0]]
-                                ? this.state.user[Object.keys(data)[0]]
+                            <div
+                              className={classnames("data-value", {
+                                "data-name":
+                                  this.getKeyFromData(data).indexOf("name") > -1
+                              })}
+                            >
+                              {user[this.getKeyFromData(data)]
+                                ? user[this.getKeyFromData(data)]
                                 : "--"}
                             </div>
                           </div>
                         );
                       })}
-                      <FileBrowser
-                        photoURL={this.state.user.photoURL}
-                        canOpenModal={!this.state.editorType}
-                      />
+                      {user.hasOwnProperty("photoURL") ? (
+                        <FileBrowser
+                          user={user}
+                          renderUpdate={this.renderUpdate}
+                          canOpedEditModal={!this.state.canOpedEditModal}
+                          stopOpenEditModal={this.stopOpenEditModal}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>
-                {this.props.isShow ? this.displayModal() : ""}
-                {this.state.isFetching ? (
-                  ""
-                ) : (
-                  <UserOrders
-                    userId={this.state.user.userId}
-                    orders={this.state.user.orders}
-                  />
-                )}
+                {isShow && this.state.canOpedEditModal
+                  ? this.displayModal()
+                  : ""}
+                {user.orders ? (
+                  <UserOrders userId={user.userId} orders={user.orders} />
+                ) : null}
               </div>
             </div>
           </div>
         </div>
       </PageContent>
     );
-  }
+  };
 }
+
 Profile.propTypes = {
+  isShow: PropTypes.bool,
   processingAction: PropTypes.func,
-  modalAction: PropTypes.func
+  modalAction: PropTypes.func,
+  messageAction: PropTypes.func
 };
-const mapStateToProps = ({ profileReducer, modalReducer }) => {
+const mapStateToProps = ({ modalReducer, profileReducer }) => {
   return {
-    user: profileReducer.user,
-    isShow: modalReducer.isShow
+    isShow: modalReducer.isShow,
+    user: profileReducer.user
   };
 };
 export default connect(
   mapStateToProps,
   {
     modalAction,
-    processingAction
+    processingAction,
+    messageAction,
+    updateProfileAction
   }
 )(Profile);

@@ -1,7 +1,9 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import omit from "lodash/omit";
+import PropTypes from "prop-types";
+import actionTypes from "../../js/actions/actionTypes";
 
-class BaseComponent extends Component {
+class BaseComponent extends PureComponent {
   constructor(props) {
     super(props);
   }
@@ -22,6 +24,22 @@ class BaseComponent extends Component {
   };
 
   /**
+   * @description Shows an error messages
+   *
+   * @param {String} message the error message to render
+   * @memberof ChangePassword
+   */
+  showErrorMessage = message => {
+    this.props.messageAction({
+      type: actionTypes.SHOW_MESSAGE,
+      payload: {
+        styles: "alert-danger",
+        message
+      }
+    });
+  };
+
+  /**
    * @description Handles the change event
    *
    * @param {Object} event the DOM event object
@@ -39,5 +57,9 @@ class BaseComponent extends Component {
     });
   };
 }
+
+BaseComponent.propTypes = {
+  messageAction: PropTypes.func
+};
 
 export default BaseComponent;

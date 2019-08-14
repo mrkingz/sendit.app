@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import TextInput from "./TextInput";
 import Form from "../containers/Form";
 import request from "../../js/utils/request";
@@ -52,22 +51,6 @@ class ChangePassword extends BaseComponent {
   };
 
   /**
-   * @description Shows an error messages
-   *
-   * @param {String} message the error message to render
-   * @memberof ChangePassword
-   */
-  showErrorMessage = message => {
-    this.props.messageAction({
-      type: actionTypes.SHOW_MESSAGE,
-      payload: {
-        styles: "alert-danger",
-        message
-      }
-    });
-  };
-
-  /**
    * @description Handles the submit request
    *
    * @memberof ChangePassword
@@ -84,24 +67,33 @@ class ChangePassword extends BaseComponent {
           fields: this.fields,
           step: 2
         });
+        this.fieldRefs.password.focus();
       }
     } else {
-      try {
-        validation = await this.validatePassword("password", password);
-        if (!validation.hasError && this.comparePasswords()) {
-          const { data } = await request.update("/auth/changePassword", {
-            password
-          });
-          this.props.modalAction({
-            type: actionTypes.IS_SUCCESSFULL,
-            payload: { message: data.message }
-          });
-        }
-      } catch (error) {
-        this.showErrorMessage(
-          "Something went wrong, could not update password"
-        );
+      validation = await this.validatePassword("password", password);
+      if (!validation.hasError && this.comparePasswords()) {
+        this.saveNewPassword(password);
       }
+    }
+  };
+
+  /**
+   * @description Save new password
+   *
+   * @param {String} password the new password
+   * @memberof ChangePassword
+   */
+  saveNewPassword = async password => {
+    try {
+      const { data } = await request.update("/auth/changePassword", {
+        password
+      });
+      this.props.modalAction({
+        type: actionTypes.IS_SUCCESSFUL,
+        payload: { message: data.message }
+      });
+    } catch (error) {
+      this.showErrorMessage("Something went wrong, could not update password");
     }
   };
 
@@ -141,6 +133,7 @@ class ChangePassword extends BaseComponent {
       if (error.response.status === 406) {
         this.setState({
           ...this.state,
+          fields: { ...this.state.fields, password: "" },
           errors: { password: "Sorry, incorrect password" }
         });
       } else {
@@ -158,7 +151,6 @@ class ChangePassword extends BaseComponent {
       <div className="panel">
         <Form
           btnText={step === 1 ? "Continue" : "Save"}
-          btnStyles="btn-block"
           submitHandler={this.submitHandler}
         >
           <TextInput
@@ -169,6 +161,7 @@ class ChangePassword extends BaseComponent {
             forwardRef={password => (this.fieldRefs.password = password)}
             value={fields.password}
             required
+            autofocus
             error={errors.password}
           />
           {step === 1 ? (
@@ -192,10 +185,6 @@ class ChangePassword extends BaseComponent {
     );
   }
 }
-
-ChangePassword.propTypes = {
-  user: PropTypes.object
-};
 
 export default connect(
   null,

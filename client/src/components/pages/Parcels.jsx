@@ -136,8 +136,8 @@ class Parcels extends Component {
               <ParcelCard
                 key={index}
                 {...parcel}
-                userId={userId}
-                isUserParcels={isUserParcels}
+                userId={Number(userId)}
+                isUserParcels={Boolean(isUserParcels)}
                 parcelId={parcel.parcelId}
               />
             );

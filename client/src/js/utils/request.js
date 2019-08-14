@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const request = {
-  post: (path, formData) => axios.post(getURL(path), formData),
-  update: (path, formData) => axios.put(getURL(path), formData),
+  post: (path, formData, configs = {}) =>
+    axios.post(getURL(path), formData, configs),
+  update: (path, formData, configs = {}) =>
+    axios.put(getURL(path), formData, configs),
   get: path => axios.get(getURL(path)),
   delete: path => axios.delete(getURL(path))
 };

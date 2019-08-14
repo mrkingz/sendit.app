@@ -203,5 +203,6 @@ export default {
   getSignUpSchema,
   getSignInSchema,
   getPhoneSchema,
+  getNameSchema,
   getPasswordSchema
 };

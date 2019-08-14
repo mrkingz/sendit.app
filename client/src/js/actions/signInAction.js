@@ -4,22 +4,18 @@ import setAuthorization from "../../js/utils/setAuthorization";
 
 const signInAction = (credentials, history, from) => async dispatch => {
   try {
-    const response = await request.post("/auth/login", credentials);
-    if (response.status === 200) {
-      setAuthorization(response.data.user.token);
+    const { data, status } = await request.post("/auth/login", credentials);
+    if (status === 200) {
+      setAuthorization(data.user.token);
       if (from) {
         history.push(from);
       }
       history.push("/dashboard");
       dispatch({
         type: actionTypes.SET_CURRENT_USER,
-        payload: {
-          user: response.data.user
-        }
+        payload: { user: data.user }
       });
-      dispatch({
-        type: actionTypes.HIDE_MESSAGE
-      });
+      dispatch({ type: actionTypes.HIDE_MESSAGE });
       return true;
     }
     return false;
@@ -38,4 +34,5 @@ const signInAction = (credentials, history, from) => async dispatch => {
     return false;
   }
 };
+
 export default signInAction;

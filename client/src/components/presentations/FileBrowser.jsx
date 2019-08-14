@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-extra-boolean-cast */
-import React, { Fragment, Component } from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Modal from "../presentations/Modal";
@@ -7,39 +8,125 @@ import modalAction from "../../js/actions/modalAction";
 import actionTypes from "../../js/actions/actionTypes";
 import request from "../../js/utils/request";
 import messageAction from "../../js/actions/messageAction";
+import BaseComponent from "../globals/BaseComponent";
+import ReactHtmlParser from "react-html-parser";
+import processingAction from "../../js/actions/processingAction";
 
-class FileBrowser extends Component {
+class FileBrowser extends BaseComponent {
   constructor(props) {
     super(props);
     this.state = {
-      photoURL: this.props.photoURL,
-      isUploading: false
+      user: this.props.user,
+      file: null,
+      step: 1,
+      hasPhotoUploaded: !!this.props.user.photoURL,
+      error: ""
     };
   }
 
   browsePhoto = e => {
-    const file = e.target.files[0];
-    console.log(URL.createObjectURL(e.target.files[0]));
+    const uploadedFile = e.target.files[0];
+    this.setState({
+      ...this.state,
+      file: uploadedFile,
+      step: 2
+    });
+    this.props.renderUpdate({
+      ...this.props.user,
+      tempPhoto: URL.createObjectURL(uploadedFile)
+    });
   };
-  uploadPhoto = () => {};
-  cancelUpload = () => {};
+
+  uploadPhoto = async () => {
+    const { hasError, message } = this.validatePhoto(this.state.file);
+    if (hasError) {
+      this.setState({
+        ...this.state,
+        error: message
+      });
+    } else {
+      await this.saveUploadedPhoto(this.state.file);
+      this.setState({
+        ...this.state,
+        file: null,
+        step: 1,
+        hasPhotoUploaded: true
+      });
+    }
+  };
+
+  saveUploadedPhoto = async file => {
+    try {
+      this.props.processingAction(true);
+
+      const form = new FormData();
+      form.append("photo", file);
+      const { data } = await request.update("/auth/uploadPhoto", form, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+
+      this.props.renderUpdate({ ...data.user }, data.message);
+      this.props.processingAction(false);
+    } catch (error) {
+      this.showErrorMessage(
+        "Something went wrong, could not save uploaded photo"
+      );
+    }
+  };
+
+  cancelUpload = () => {
+    this.setState({
+      ...this.state,
+      step: 1
+    });
+    this.props.renderUpdate({
+      ...this.props.user,
+      tempPhoto: null
+    });
+  };
+
   removePhoto = async option => {
+    this.props.stopOpenEditModal();
     if (!option) {
       this.showConfirmModal();
     } else {
       try {
-        const response = await request.update("/auth/removePhoto", null);
+        this.props.processingAction(true);
+
+        const { data } = await request.update("/auth/removePhoto");
         this.props.modalAction({
-          type: actionTypes.IS_SUCCESSFULL,
-          payload: { message: response.data.message }
+          type: actionTypes.IS_SUCCESSFUL,
+          payload: { message: data.message }
         });
+
+        const { tempPhoto, ...user } = this.props.user;
+        this.setState({
+          ...this.state,
+          hasPhotoUploaded: false,
+          photoURL: null,
+          tempPhoto: null
+        });
+        this.props.renderUpdate({ ...user, photoURL: null, tempPhoto: null });
+        this.props.processingAction(false);
       } catch (error) {
-        this.props.messageAction({
-          type: actionTypes.SHOW_MESSAGE,
-          payload: { message: "Something went wrong, could not remove photo" }
-        });
+        this.showErrorMessage("Something went wrong, could not remove photo");
       }
     }
+  };
+
+  getImageExtension = file => file.name.split(".").pop();
+
+  validatePhoto = file => {
+    const size = file.size / 1024 / 1024; // in MB
+    const ext = this.getImageExtension(file);
+    const formats = ["jpg", "png", "jpeg"];
+    let message = null;
+    if (!formats.includes(ext)) {
+      message = `Photo format must be one of <b>${formats.join(", ")}</b>`;
+    } else if (size > 2) {
+      message = "File size exceeds 2 MB";
+    }
+    return { hasError: message !== null, message };
   };
 
   showConfirmModal = () => {
@@ -52,58 +139,62 @@ class FileBrowser extends Component {
       }
     });
   };
-  render() {
-    return (
-      <Fragment>
-        {this.props.photoURL ? (
-          ""
-        ) : (
-          <form className="mt-lg" id="upload" encType="multipart/form-data">
-            <label className="input-label fine-btn">
-              <input
-                id="photo"
-                type="file"
-                name="photo"
-                onChange={this.browsePhoto}
-                required
-              />
-              <span>Upload photo</span>
-            </label>
-          </form>
-        )}
-        {this.state.isUploading ? (
-          <div id="group-btn">
+
+  displayButton = () => {
+    switch (this.state.step) {
+      case 1:
+        if (this.state.hasPhotoUploaded) {
+          return (
+            <button
+              id="remove"
+              className="btn btn-sm btn-link fine-btn size-11"
+              onClick={() => this.removePhoto(false)}
+            >
+              Remove photo
+            </button>
+          );
+        } else {
+          return (
+            <form id="upload" encType="multipart/form-data">
+              <label className="input-label fine-btn">
+                <input
+                  type="file"
+                  name="photo"
+                  onChange={this.browsePhoto}
+                  required
+                />
+                <span>Upload photo</span>
+              </label>
+            </form>
+          );
+        }
+      case 2:
+        return (
+          <Fragment>
             <button
               id="save"
-              className="btn btn-sm btn-link fine-btn"
+              className="btn btn-sm btn-link fine-btn size-12"
               onClick={this.uploadPhoto}
             >
               Save
             </button>
             <button
               id="cancel"
-              className="btn btn-sm btn-link fine-btn mx-md"
+              className="btn btn-sm btn-link fine-btn size-12 mx-md"
               onClick={this.cancelUpload}
             >
               Cancel
             </button>
-          </div>
-        ) : (
-          ""
-        )}
-        {!!this.state.photoURL ? (
-          <div>
-            <button
-              className="btn btn-sm btn-link fine-btn"
-              onClick={() => this.removePhoto(false)}
-            >
-              Remove photo
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-        {this.props.canOpenModal ? (
+          </Fragment>
+        );
+    }
+  };
+
+  render() {
+    return (
+      <Fragment>
+        <div className="mt-lg">{this.displayButton()}</div>
+        {!this.props.canOpenEditModal ? (
           <Modal
             btnText="Proceed"
             btnStyles="btn-primary"
@@ -118,22 +209,25 @@ class FileBrowser extends Component {
         ) : (
           ""
         )}
+        <span className="error">{ReactHtmlParser(this.state.error)}</span>
       </Fragment>
     );
   }
 }
 
 FileBrowser.propTypes = {
-  canOpenModal: PropTypes.bool,
-  photoURL: PropTypes.string,
+  canOpenEditModal: PropTypes.bool,
+  user: PropTypes.object,
   modalAction: PropTypes.func,
-  messageAction: PropTypes.func
+  messageAction: PropTypes.func,
+  renderUpdate: PropTypes.func
 };
 
 export default connect(
   null,
   {
     modalAction,
-    messageAction
+    messageAction,
+    processingAction
   }
 )(FileBrowser);

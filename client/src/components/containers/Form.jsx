@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -7,26 +8,36 @@ import AlertMessage from "../presentations/AlertMessage";
 import messageAction from "../../js/actions/messageAction";
 
 class Form extends Component {
-  state = {
-    isProcessing: false
-  };
+  _isMounted = false;
+  constructor(props) {
+    super(props);
+    this.state = {
+      isProcessing: false
+    };
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
   onSubmitHandler = async event => {
     event.preventDefault();
-    this.setState({
-      isProcessing: true
-    });
+    this.setState({ isProcessing: true });
     await this.props.submitHandler();
-    this.setState({
-      isProcessing: false
-    });
+    if (this._isMounted) {
+      this.setState({ isProcessing: false });
+    }
   };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render() {
     const {
       title,
       formStyles,
       requiredStyles,
-      submitHandler,
       btnStyles,
       btnText
     } = this.props;
@@ -42,7 +53,7 @@ class Form extends Component {
             are required!
           </p>
           <Button
-            wrapperStyle="mb-sm mt-lg"
+            wrapperStyle="mb-sm mt-sm mx-sm"
             btnStyle={`btn btn-primary ${btnStyles}`}
             text={this.state.isProcessing ? "Processing..." : btnText}
             isDisabled={this.state.isProcessing}
@@ -56,6 +67,8 @@ class Form extends Component {
 
 Form.defaultProps = {
   formStyles: "",
+  btnText: "Save",
+  btnStyles: "btn-block",
   requiredStyles: "hide"
 };
 
@@ -69,10 +82,11 @@ Form.propTypes = {
   submitHandler: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ messageReducer }) => {
+const mapStateToProps = ({ messageReducer, profileReducer }) => {
   return {
     isProcessing: messageReducer.isProcessing,
-    message: messageReducer.message
+    message: messageReducer.message,
+    isRunning: profileReducer.isProcessing
   };
 };
 

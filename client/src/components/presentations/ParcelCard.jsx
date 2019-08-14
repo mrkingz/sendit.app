@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
-import Button from "./Button";
 
 const ParcelCard = props => {
   const {
@@ -63,9 +62,12 @@ const ParcelCard = props => {
 };
 
 ParcelCard.propTypes = {
+  userId: PropTypes.number,
+  parcelId: PropTypes.number,
+  isUserParcels: PropTypes.bool,
   trackingNo: PropTypes.string.isRequired,
   weight: PropTypes.number.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   deliveryMethod: PropTypes.string.isRequired,
   deliveryStatus: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,

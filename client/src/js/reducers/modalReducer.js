@@ -21,7 +21,7 @@ const modalReducer = (
         title: action.payload.title || state.title,
         isStatic: action.payload.isStatic || state.isStatic
       };
-    case actionTypes.IS_SUCCESSFULL:
+    case actionTypes.IS_SUCCESSFUL:
       return {
         ...state,
         type: "alert",
@@ -30,6 +30,8 @@ const modalReducer = (
         isSuccessful: true,
         title: "Successful!"
       };
+    case actionTypes.SET_STATIC_MODAL:
+      return { ...state, isStatic: true };
     case actionTypes.CLOSE_MODAL:
       return {
         ...state,

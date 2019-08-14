@@ -2,15 +2,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Redirect, Route } from "react-router-dom";
-import authenticate from "@utils/authenticate";
+import isAuthenticated from "@utils/isAuthenticated";
 
 const Authenticate = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props => {
-        return authenticate() ? (
-          <Component {...rest} />
+        const properties = { ...props, ...rest };
+        return isAuthenticated() ? (
+          <Component {...properties} />
         ) : (
           <Redirect
             to={{

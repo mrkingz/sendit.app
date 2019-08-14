@@ -1,19 +1,26 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import dropdown from "../../js/utils/script";
 import actionTypes from "../../js/actions/actionTypes";
 import Button from "../presentations/Button";
+import updateProfileAction from "../../js/actions/updateProfileAction";
 
 const AuthNavMenu = props => {
-  const { firstname, lastname, isAdmin } = props.user;
+  const { firstname, lastname, isAdmin, photoURL, tempPhoto } = props.user;
+
   const logOut = () => {
-    props.dispatch({
+    this.props.updateProfileAction({
       type: actionTypes.LOGOUT_CURRENT_USER
     });
     props.history.push("/");
     localStorage.removeItem("token");
   };
+
+  const getPhotoURL = () => (tempPhoto ? tempPhoto : photoURL);
+
+  const getFullName = () => `${firstname} ${lastname}`;
 
   return (
     <Fragment>
@@ -61,12 +68,16 @@ const AuthNavMenu = props => {
           onClick={() => dropdown("user-dropdown")}
           btnStyle="nav-menu-button dropbtn"
         >
-          <i className="fa fa-user-circle" />{" "}
+          {getPhotoURL() ? (
+            <img id="avatar-img" src={getPhotoURL()} alt="" />
+          ) : (
+            <i className="fa fa-user-circle" />
+          )}
           <i className="fa fa-caret-down size-18 normal ml-md" />
         </Button>
         <div id="user-dropdown" className="dropdown-content size-11 align-left">
           <div className="panel px-md user-name">
-            <div className="size-14 bold">{`${firstname} ${lastname}`}</div>
+            <div className="size-14 bold">{getFullName()}</div>
           </div>
           <Link to="/profile" className="menu-btn">
             <i className="fa fa-user-o" /> My profile
@@ -83,9 +94,20 @@ const AuthNavMenu = props => {
 AuthNavMenu.propTypes = {
   history: PropTypes.object,
   user: PropTypes.object,
-  dispatch: PropTypes.func.isRequired,
+  updateProfileAction: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   pathname: PropTypes.string
 };
 
-export default AuthNavMenu;
+const mapStateToProps = ({ profileReducer }) => {
+  return {
+    user: profileReducer.user
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    updateProfileAction
+  }
+)(withRouter(AuthNavMenu));
