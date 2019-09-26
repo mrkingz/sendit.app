@@ -12,7 +12,7 @@ const getURL = path => {
   const isDevelopment = process.env.NODE_ENV === "development";
   const url = isDevelopment
     ? "http://localhost:3000/api/v1"
-    : "https://senditkingsley.herokuapp.com/api/v1";
+    : "https://sendit-app-api.herokuapp.com/api/v1";
   return url.concat(`${path}`);
 };
 export default request;

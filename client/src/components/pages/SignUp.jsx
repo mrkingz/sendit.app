@@ -1,16 +1,17 @@
-import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import AuthWrapper from "../containers/AuthWrapper";
-import TextInput from "../presentations/TextInput";
+import React, { Component, Fragment } from "react";
+
 import Button from "../presentations/Button";
-import AlertMessage from "../presentations/AlertMessage";
-import Required from "../presentations/Required";
-import messageAction from "../../js/actions/messageAction";
-import signUpAction from "../../js/actions/signUpAction";
 import request from "../../js/utils/request";
+import Required from "../presentations/Required";
+import TextInput from "../presentations/TextInput";
+import AuthWrapper from "../containers/AuthWrapper";
 import actionTypes from "../../js/actions/actionTypes";
+import signUpAction from "../../js/actions/signUpAction";
+import AlertMessage from "../presentations/AlertMessage";
+import messageAction from "../../js/actions/messageAction";
 class SignUp extends Component {
   /**
    * @description handle submit action
@@ -134,7 +135,8 @@ SignUp.propTypes = {
   fieldRefs: PropTypes.object.isRequired,
   isProcessing: PropTypes.bool.isRequired,
   validateFields: PropTypes.func.isRequired,
-  onChangeHandler: PropTypes.func.isRequired
+  onChangeHandler: PropTypes.func.isRequired,
+  history: PropTypes.object
 };
 
 const mapStateToProps = ({ messageReducer }) => {

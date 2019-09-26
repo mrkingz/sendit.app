@@ -1,23 +1,24 @@
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import React, { Component, Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import request from "../../js/utils/request";
-import PageContent from "../containers/PageContent";
-import AlertMessage from "../presentations/AlertMessage";
+
 import Map from "../presentations/Map";
-import actionTypes from "../../js/actions/actionTypes";
-import messageAction from "../../js/actions/messageAction";
-import processingAction from "../../js/actions/processingAction";
-import modalAction from "../../js/actions/modalAction";
 import Modal from "../presentations/Modal";
+import request from "../../js/utils/request";
 import dropdown from "../../js/utils/script";
-import UpdateLocation from "../presentations/UpdateLocation";
+import PageContent from "../containers/PageContent";
+import modalAction from "../../js/actions/modalAction";
+import actionTypes from "../../js/actions/actionTypes";
+import UpdatePickUp from "../presentations/UpdatePickUp";
 import UpdateStatus from "../presentations/UpdateStatus";
+import AlertMessage from "../presentations/AlertMessage";
+import messageAction from "../../js/actions/messageAction";
+import UpdateLocation from "../presentations/UpdateLocation";
+import UpdateReceiver from "../presentations/UpdateReceiver";
+import processingAction from "../../js/actions/processingAction";
 import UpdateParcelDetails from "../presentations/UpdateParcelDetails";
 import UpdateDestination from "../presentations/UpdateDestination";
-import UpdatePickUp from "../presentations/UpdatePickUp";
-import UpdateReceiver from "../presentations/UpdateReceiver";
 
 class Parcel extends Component {
   constructor(props) {

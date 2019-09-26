@@ -1,24 +1,25 @@
 import React from "react";
-import PropTypes from "prop-types";
 import omit from "lodash/omit";
-import Button from "../presentations/Button";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+
 import Form from "../containers/Form";
-import validator from "../../js/utils/validations/validator";
-import messageAction from "../../js/actions/messageAction";
-import PageContent from "../containers/PageContent";
-import ParcelPreview from "../presentations/ParcelPreview";
+import { connect } from "react-redux";
+import Places from "../globals/Places";
 import request from "../../js/utils/request";
+import Button from "../presentations/Button";
+import { withRouter } from "react-router-dom";
+import PageContent from "../containers/PageContent";
 import actionTypes from "../../js/actions/actionTypes";
+import success from "../../../assets/images/success.png";
+import AlertMessage from "../presentations/AlertMessage";
+import messageAction from "../../js/actions/messageAction";
+import ParcelPreview from "../presentations/ParcelPreview";
 import ParcelDetails from "../presentations/ParcelDetails";
 import PickUpDetails from "../presentations/PickUpDetails";
-import DestinationDetails from "../presentations/DestinationDetails";
+import validator from "../../js/utils/validations/validator";
 import ReceiverDetails from "../presentations/ReceiverDetails";
-import AlertMessage from "../presentations/AlertMessage";
-import success from "../../../assets/images/success.png";
 import processingAction from "../../js/actions/processingAction";
-import Places from "../globals/Places";
+import DestinationDetails from "../presentations/DestinationDetails";
 
 class CreateParcel extends Places {
   constructor(props) {

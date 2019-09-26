@@ -1,9 +1,9 @@
-import React, { Component } from "react";
 import omit from "lodash/omit";
+
+import BaseComponent from "./BaseComponent";
 import request from "../../js/utils/request";
 import messageAction from "../../js/actions/messageAction";
 import actionTypes from "../../js/actions/actionTypes";
-import BaseComponent from "./BaseComponent";
 
 class Places extends BaseComponent {
   constructor(props) {
