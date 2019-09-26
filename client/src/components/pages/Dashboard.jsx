@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import React, { Component } from "react";
+
 import Template from "../containers/Template";
 
 class Dashboard extends Component {
@@ -60,6 +62,11 @@ class Dashboard extends Component {
     );
   }
 }
+
+Dashboard.propTypes = {
+  user: PropTypes.object.isRequired,
+  isAdmin: PropTypes.bool
+};
 
 const mapStateToProps = ({ profileReducer }) => {
   return {

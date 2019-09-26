@@ -1,6 +1,7 @@
-import React, { PureComponent } from "react";
 import omit from "lodash/omit";
 import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+
 import actionTypes from "../../js/actions/actionTypes";
 
 class BaseComponent extends PureComponent {

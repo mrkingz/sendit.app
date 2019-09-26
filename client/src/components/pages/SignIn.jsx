@@ -1,14 +1,15 @@
-import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import AuthWrapper from "../containers/AuthWrapper";
-import TextInput from "../presentations/TextInput";
-import CheckInput from "../presentations/CheckInput";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import React, { Component, Fragment } from "react";
+
 import Button from "../presentations/Button";
+import TextInput from "../presentations/TextInput";
+import AuthWrapper from "../containers/AuthWrapper";
+import CheckInput from "../presentations/CheckInput";
 import AlertMessage from "../presentations/AlertMessage";
 import messageAction from "../../js/actions/messageAction";
 import signInAction from "../../js/actions/signInAction";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
 import actionTypes from "../../js/actions/actionTypes";
 import AuthRedirect from "../presentations/AuthRedirect";
 

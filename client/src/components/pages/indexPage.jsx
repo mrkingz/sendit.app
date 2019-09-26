@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from "react";
-import map from "../../../assets/images/bg.jpg";
-import fast from "../../../assets/images/fast.jpg";
+
 import Banner from "../headers/Banner";
 import Template from "../containers/Template";
+import map from "../../../assets/images/bg.jpg";
+import fast from "../../../assets/images/fast.jpg";
 import ImageCard from "../presentations/ImageCard";
 import NotePanel from "../presentations/NotePanel";
 

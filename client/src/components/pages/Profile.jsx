@@ -1,22 +1,23 @@
 import React from "react";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import classnames from "classnames";
+import { connect } from "react-redux";
+
 import Modal from "../presentations/Modal";
-import PageContent from "../containers/PageContent";
 import dropdown from "../../js/utils/script";
+import PageContent from "../containers/PageContent";
+import UpdateName from "../presentations/UpdateName";
+import UserOrders from "../presentations/UserOrders";
+import BaseComponent from "../globals/BaseComponent";
 import avatar from "../../../assets/images/avatar.png";
 import FileBrowser from "../presentations/FileBrowser";
-import BaseComponent from "../globals/BaseComponent";
-import processingAction from "../../js/actions/processingAction";
-import UserOrders from "../presentations/UserOrders";
 import actionTypes from "../../js/actions/actionTypes";
 import modalAction from "../../js/actions/modalAction";
-import ChangePassword from "../presentations/ChangePassword";
 import messageAction from "../../js/actions/messageAction";
-import updateProfileAction from "../../js/actions/updateProfileAction";
-import UpdateName from "../presentations/UpdateName";
+import ChangePassword from "../presentations/ChangePassword";
+import processingAction from "../../js/actions/processingAction";
 import UpdatePhoneNumber from "../presentations/UpdatePhoneNumber";
-import classnames from "classnames";
+import updateProfileAction from "../../js/actions/updateProfileAction";
 
 class Profile extends BaseComponent {
   constructor(props) {
